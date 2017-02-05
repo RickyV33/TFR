@@ -1,7 +1,8 @@
 /node_modules
-bundle.js
-npm-debug.log
-
-# IntelliJ
 *.iml
 /.idea
+.env
+dist
+*.log
+coverage
+.DS_Store
