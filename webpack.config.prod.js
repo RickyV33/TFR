@@ -1,19 +1,21 @@
 'use strict'
 
-import path from 'path'
-import webpack from 'webpack'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
+const path = require('path')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+// import path from 'path'
+// import webpack from 'webpack'
+// import HtmlWebpackPlugin from 'html-webpack-plugin'
 
-export default {
-  devtool: 'eval-source-map',
+module.exports =
+{
   entry: [
-    'webpack-hot-middleware/client?reload=true',
     path.join(__dirname, 'src/main.js')
   ],
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/'
+    filename: '[name]-[hash].min.js'
+    // publicPath: '/'
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -21,7 +23,12 @@ export default {
       inject: 'body',
       filename: 'index.html'
     }),
-    new webpack.HotModuleReplacementPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compressor: {
+        warnings: false,
+        screw_ie8: true
+      }
+    }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     })
@@ -32,7 +39,7 @@ export default {
       exclude: /node_modules/,
       loader: 'babel-loader',
       query: {
-        'presets': ['react', 'es2015', 'stage-1', 'react-hmre']
+        'presets': ['react', 'es2015', 'stage-1' ]
       }
     }, {
       test: /\.css?$/,
