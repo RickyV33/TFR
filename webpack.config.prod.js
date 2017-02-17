@@ -10,7 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports =
 {
   entry: [
-    path.join(__dirname, 'src/main.js')
+    path.join(__dirname, 'src/client.js')
   ],
   output: {
     path: path.join(__dirname, 'dist'),
