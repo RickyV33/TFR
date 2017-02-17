@@ -23,7 +23,8 @@ export default class App extends Component {
     }
     return (
       <div>
-        <div>Hello World</div>
+        <h1>Television for Reddit</h1>
+        <p>watch shit here bro</p>
         <div>
           <YouTube videoId='2g811Eo7K8U' opts={opts} onReady={this.onReady} />
         </div>
