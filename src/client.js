@@ -1,18 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
-import { Router, browserHistory } from 'react-router'
+import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 
-import routes from './routes'
-import reducers from './redux/modules/reducers'
+import configureStore from './redux/configureStore'
+import Television from './containers/Television'
 
-const createStoreWithMiddleware = applyMiddleware()(createStore)
-const store = createStoreWithMiddleware(reducers)
+const store = configureStore()
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={browserHistory} routes={routes} />
+    <Router history={browserHistory}>
+      <Route path='/' >
+        <IndexRoute component={Television} />
+      </Route>
+    </Router>
   </Provider>,
   document.getElementById('root')
 )
