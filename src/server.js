@@ -7,7 +7,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware'
 import 'dotenv/config'
 
 import config from '../webpack.config.js'
-import reddit from './reddit'
+import reddit from './redditApi'
 
 const app = express()
 app.use(morgan('dev'))
