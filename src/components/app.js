@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import YouTube from './YouTube'
+import '../style/style.css'
 
 export default class App extends Component {
   constructor (props) {

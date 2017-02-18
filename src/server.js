@@ -4,6 +4,7 @@ import morgan from 'morgan'
 import webpack from 'webpack'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
+import 'dotenv/config'
 
 import config from '../webpack.config.js'
 import reddit from './reddit'
@@ -29,7 +30,7 @@ if (process.env.NODE_ENV === 'development') {
   app.use(webpackMiddleware)
   app.use(webpackHotMiddleware(compiler))
   app.get('*', function response (req, res) {
-    res.write(webpackMiddleware.fileSystem.readFileSync(path.join(__dirname, '../dist/index.html')))
+    res.write(webpackMiddleware.fileSystem.readFileSync(path.resolve(__dirname, '../dist/index.html')))
     res.end()
   })
 } else {

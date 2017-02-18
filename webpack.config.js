@@ -1,5 +1,8 @@
 'use strict'
 
+// Note: This file is only in ES6 because it is being ran from src/server.js
+// which is being transpiled (see package.json:script:dev)
+
 import path from 'path'
 import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
@@ -8,11 +11,11 @@ export default {
   devtool: 'eval-source-map',
   entry: [
     'webpack-hot-middleware/client?reload=true',
-    path.join(__dirname, 'src/client.js')
+    path.resolve(__dirname, 'src/client.js')
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].js',
     publicPath: '/'
   },
   plugins: [
@@ -23,21 +26,32 @@ export default {
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+      'process.env.NODE_ENV': JSON.stringify('development')
     })
   ],
   module: {
     rules: [{
-      test: /\.jsx?$/,
+      test: /\.js?$/,
       exclude: /node_modules/,
-      loader: 'babel-loader',
-      query: {
-        'presets': ['react', 'es2015', 'stage-1', 'react-hmre']
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['react', 'es2015', 'stage-1', 'react-hmre']
+        }
       }
     }, {
       test: /\.css?$/,
-      loader: 'style-loader!css-loader?modules=true&localIdentName=[name]_[local]_[hash:base64:5]',
-      include: path.join(__dirname, 'client')
+      use: [
+        {
+          loader: 'style-loader'
+        }, {
+          loader: 'css-loader',
+          options: {
+            modules: true,
+            localIdentName: '[name]_[local]_[hash:base64:5]'
+          }
+        }
+      ]
     }]
   }
 }
