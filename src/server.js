@@ -7,11 +7,10 @@ import webpackHotMiddleware from 'webpack-hot-middleware'
 import 'dotenv/config'
 
 import config from '../webpack.config.js'
-import reddit from './redditApi'
 
 const app = express()
 app.use(morgan('dev'))
-app.use('/api', reddit)
+// app.use('/api', reddit)
 
 if (process.env.NODE_ENV === 'development') {
   const compiler = webpack(config)
@@ -37,9 +36,6 @@ if (process.env.NODE_ENV === 'development') {
   app.get('*', (req, res) => {
     app.use(express.static(__dirname + '../dist'))
     res.sendFile(path.join(__dirname, '../dist/index.html'))
-    // app.use(express.static(__dirname))
-    // // res.sendFile('/index.html', {root: __dirname})
-    // res.sendFile(path.join(__dirname, 'index.html'))
   })
 }
 
