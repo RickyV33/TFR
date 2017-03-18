@@ -15,13 +15,14 @@ export default function reducer (state = initialState, action) {
       return {
         ...state,
         upNext: [state.current, ...state.upNext],
-        current: state.played.slice(state.played.length),
-        played: [...state.played(0, state.played.length)]
+        current: state.played.slice(state.played.length - 1),
+        played: [...state.played.slice(0, state.played.length - 1)]
       }
 
     case GET_NEXT_VIDEO:
       return {
         ...state,
+        played: state.current ? [...state.played, state.current] : initialState.played,
         current: state.upNext[0],
         upNext: state.upNext.slice(1)
       }
@@ -41,7 +42,7 @@ export default function reducer (state = initialState, action) {
  * Action Creators
  */
 
-export const GetPreviouslyPlayedVideo = () => ({ type: GET_PREVIOUSLY_PLAYED_VIDEO })
+export const getPreviouslyPlayedVideo = () => ({ type: GET_PREVIOUSLY_PLAYED_VIDEO })
 
 export const getNextVideo = () => ({ type: GET_NEXT_VIDEO })
 

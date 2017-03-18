@@ -4,7 +4,8 @@ import * as userActions from './user'
 const ADD_VIDEOS_BY_ID = 'TelevisionForReddit/videos/ADD_VIDEOS_BY_ID'
 
 const initialState = {
-  byId: {}
+  byId: {},
+  fetchingStatus: 'DONE'
 }
 
 export default function reducer (state = initialState, action) {
@@ -42,7 +43,6 @@ export function getHotVideos (subreddit) {
         mapToIds[video.id] = video
       })
       const sortedByIds = youtubeVideos.map(video => video.id)
-      console.log(sortedByIds)
       // --------------------------------
       dispatch(addVideosById(mapToIds))
       dispatch(userActions.setNextVideos(sortedByIds))
