@@ -13,7 +13,9 @@ export class Television extends Component {
   }
 
   componentDidMount () {
-    this.props.getAccessToken()
+    this.props.getAccessToken().then(() => {
+      this.props.getHotVideos('videos')
+    })
   }
 
   render () {
@@ -37,7 +39,7 @@ export class Television extends Component {
   }
 }
 
-const mapStateToProps = ({ reddit }) => ({ reddit })
+// const mapStateToProps = ({ reddit }) => ({ reddit })
 const mapDispatchToProps = dispatch => bindActionCreators({ getHotVideos, getAccessToken }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Television)

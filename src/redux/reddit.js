@@ -1,34 +1,52 @@
 import axios from 'axios'
 import qs from 'qs'
 
-export const fetchHotVideos = subreddit => axios(`/${subreddit}/hot`)
+import configureStore from './configureStore'
 
-export function fetchRisingVideos (subreddit) {
-  return axios(`/${subreddit}/rising`)
+const REDDIT = 'https://oauth.reddit.com/r/'
+
+const request = (path, accessToken) => {
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  }
+
+  return axios(`${REDDIT}${path}`, options).then(response => {
+    return response.data.data.children.map(entry => entry.data)
+  }).catch(error => { console.error('request() -> ', error) })
 }
 
-export function fetchNewVideos (subreddit) {
-  return axios(`/${subreddit}/hot`)
+export const fetchHotVideos = (subreddit, accessToken) => {
+  return request(`${subreddit}/hot`, accessToken)
 }
 
-export function fetchTopOfDayVideos (subreddit) {
-  return axios(`/${subreddit}/top/day`)
+export const fetchRisingVideos = (subreddit, accessToken) => {
+  return request(`${subreddit}/rising`, accessToken)
 }
 
-export function fetchTopOfWeekVideos (subreddit) {
-  return axios(`/${subreddit}/top/week`)
+export const fetchNewVideos = (subreddit, accessToken) => {
+  return request(`${subreddit}/new`, accessToken)
 }
 
-export function fetchTopOfMonthVideos (subreddit) {
-  return axios(`/${subreddit}/top/month`)
+export const fetchTopOfDayVideos = (subreddit, accessToken) => {
+  return request(`${subreddit}/top/day`, accessToken)
 }
 
-export function fetchTopOfYearVideos (subreddit) {
-  return axios(`/${subreddit}/top/year`)
+export const fetchTopOfWeekVideos = (subreddit, accessToken) => {
+  return request(`${subreddit}/top/week`, accessToken)
 }
 
-export function fetchTopOfAllTimeVideos (subreddit) {
-  return axios(`/${subreddit}/top/all`)
+export const fetchTopOfMonthVideos = (subreddit, accessToken) => {
+  return request(`${subreddit}/top/month`, accessToken)
+}
+
+export const fetchTopOfYearVideos = (subreddit, accessToken) => {
+  return request(`${subreddit}/top/year`, accessToken)
+}
+
+export const fetchTopOfAllTimeVideos = (subreddit, accessToken) => {
+  return request(`${subreddit}/top/all`, accessToken)
 }
 
 export function authorize () {
@@ -39,7 +57,8 @@ export function authorize () {
   })
   const options = {
     headers: {
-      authorization: 'Basic MWVqUU8wU0swZzlpZnc6'
+      // Basic (ClientId + SecretId) -> SecretId is empty string
+      Authorization: 'Basic MWVqUU8wU0swZzlpZnc6'
     }
   }
 
