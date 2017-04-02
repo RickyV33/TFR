@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import getYoutubeId from 'get-youtube-id'
 
-import { getPreviouslyPlayedVideo, getNextVideo, selector } from '../redux/modules/user'
+import { getPreviousVideo, getNextVideo, selector } from '../redux/modules/user'
 import { getHotVideos } from '../redux/modules/videos'
 import { getAccessToken } from '../redux/modules/authorization'
 import YouTube from '../components/YouTube'
@@ -43,7 +43,7 @@ export class Television extends Component {
           <h2>Up Next: {upNextTitle}</h2>
           <h1>{videoTitle}</h1>
           <input type='button' onClick={() => this.props.getHotVideos('videos')} value='more' />
-          <input type='button' onClick={this.props.getPreviouslyPlayedVideo} value='prev' />
+          <input type='button' disabled={this.props.previousVideo} onClick={this.props.getPreviousVideo} value='prev' />
           <YouTube videoId={videoId} opts={opts} />
           <input type='button' onClick={this.props.getNextVideo} value='next' />
         </div>
@@ -57,7 +57,7 @@ const mapStateToProps = state => selector(state)
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    getHotVideos, getAccessToken, getPreviouslyPlayedVideo, getNextVideo
+    getHotVideos, getAccessToken, getPreviousVideo, getNextVideo
   }, dispatch)
 }
 

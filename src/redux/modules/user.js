@@ -2,37 +2,37 @@ import { createStructuredSelector } from 'reselect'
 // import isEqual from 'lodash.isEqual'
 import { isEqual } from 'lodash'
 
-const GET_PREVIOUSLY_PLAYED_VIDEO = 'TelevisionForReddit/user/GET_PREVIOUSLY_PLAYED_VIDEO'
+const GET_PREVIOUS_VIDEO = 'TelevisionForReddit/user/GET_PREVIOUS_VIDEO'
 const GET_NEXT_VIDEO = 'TelevisionForReddit/user/GET_NEXT_VIDEO'
 const SET_NEXT_VIDEOS = 'TelevisionForReddit/user/SET_NEXT_VIDEOS'
 
 const initialState = {
-  upNext: [],
+  next: [],
   current: '',
-  played: []
+  previous: []
 }
 
 export default function reducer (state = initialState, action) {
   switch (action.type) {
 
-    case SET_PREVIOUSLY_PLAYED_VIDEO:
+    case GET_PREVIOUS_VIDEO:
       return {
-        upNext: [state.current, ...state.upNext],
-        current: state.played.slice(-1).pop(),
-        played: state.played.slice(0, state.played.length - 1)
+        next: [state.current, ...state.next],
+        current: state.previous.slice(-1).pop(),
+        previous: state.previous.slice(0, state.previous.length - 1)
       }
 
-    case SET_NEXT_VIDEO:
+    case GET_NEXT_VIDEO:
       return {
-        played: state.current ? [...state.played, state.current] : initialState.played,
-        current: state.upNext[0],
-        upNext: state.upNext.slice(1)
+        previous: state.current ? [...state.previous, state.current] : initialState.previous,
+        current: state.next[0],
+        next: state.next.slice(1)
       }
 
     case SET_NEXT_VIDEOS:
       return {
         ...state,
-        upNext: [...state.upNext, ...action.videos]
+        next: [...state.next, ...action.videos]
       }
 
     default:
@@ -44,7 +44,7 @@ export default function reducer (state = initialState, action) {
  * Action Creators
  */
 
-export const getPreviouslyPlayedVideo = () => ({ type: GET_PREVIOUSLY_PLAYED_VIDEO })
+export const getPreviousVideo = () => ({ type: GET_PREVIOUS_VIDEO })
 
 export const getNextVideo = () => ({ type: GET_NEXT_VIDEO })
 
@@ -56,6 +56,6 @@ export const setNextVideos = videos => ({ type: SET_NEXT_VIDEOS, videos })
 
 const previousVideo = state => state.videos.byId[state.user.previous.slice(-1).pop()]
 const currentVideo = state => state.videos.byId[state.user.current]
-const nextVideo = state => state.videos.byId[state.user.upNext[0]]
+const nextVideo = state => state.videos.byId[state.user.next[0]]
 
 export const selector = createStructuredSelector({ previousVideo, currentVideo, nextVideo })
