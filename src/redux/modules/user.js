@@ -54,7 +54,8 @@ export const setNextVideos = videos => ({ type: SET_NEXT_VIDEOS, videos })
  * Selectors
  */
 
+const previousVideo = state => state.videos.byId[state.user.previous.slice(-1).pop()]
 const currentVideo = state => state.videos.byId[state.user.current]
 const nextVideo = state => state.videos.byId[state.user.upNext[0]]
 
-export const selector = createStructuredSelector({ currentVideo, nextVideo })
+export const selector = createStructuredSelector({ previousVideo, currentVideo, nextVideo })
