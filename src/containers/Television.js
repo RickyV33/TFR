@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import getYoutubeId from 'get-youtube-id'
 
-import { setPreviouslyPlayedVideo, setNextVideo, selector } from '../redux/modules/user'
+import { getPreviouslyPlayedVideo, getNextVideo, selector } from '../redux/modules/user'
 import { getHotVideos } from '../redux/modules/videos'
 import { getAccessToken } from '../redux/modules/authorization'
 import YouTube from '../components/YouTube'
@@ -18,7 +18,7 @@ export class Television extends Component {
     this.props.getAccessToken().then(() => {
       return this.props.getHotVideos('videos')
     }).then(() => {
-      this.props.setNextVideo()
+      this.props.getNextVideo()
     })
   }
 
@@ -43,9 +43,9 @@ export class Television extends Component {
           <h2>Up Next: {upNextTitle}</h2>
           <h1>{videoTitle}</h1>
           <input type='button' onClick={() => this.props.getHotVideos('videos')} value='more' />
-          <input type='button' onClick={this.props.setPreviouslyPlayedVideo} value='prev' />
+          <input type='button' onClick={this.props.getPreviouslyPlayedVideo} value='prev' />
           <YouTube videoId={videoId} opts={opts} />
-          <input type='button' onClick={this.props.setNextVideo} value='next' />
+          <input type='button' onClick={this.props.getNextVideo} value='next' />
         </div>
       )
     }
@@ -57,7 +57,7 @@ const mapStateToProps = state => selector(state)
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    getHotVideos, getAccessToken, setPreviouslyPlayedVideo, setNextVideo
+    getHotVideos, getAccessToken, getPreviouslyPlayedVideo, getNextVideo
   }, dispatch)
 }
 
