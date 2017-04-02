@@ -3,27 +3,27 @@ import qs from 'qs'
 
 import configureStore from './configureStore'
 
-const REDDIT = 'https://oauth.reddit.com/r/'
+const normalize = (accum, video) => {
+  accum.mappedToId[video.id] = video
+  accum.sortedById.push(video.id)
+  return accum
+}
 
 const request = (path, accessToken) => {
+  const redditUrl = 'https://oauth.reddit.com/r/'
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`
     }
   }
 
-  return axios(`${REDDIT}${path}`, options).then(response => {
+  return axios(`${redditUrl}${path}`, options).then(response => {
     const initialValue = { mappedToId: {}, sortedById: [] }
     return response.data.data.children
       .map(entry => entry.data)
       .filter(video => video.domain.match(/^(youtube.com|youtu.be)$/))
-      .map(video => ({[video.id]: video}))
-      .reduce((accum, video) => {
-        accum.mappedToId = { ...accum.mappedToId, ...video}
-        accum.sortedById.push(video.id)
-        return accum
-      }, initialValue)
-  }).catch(error => { console.error('request() -> ', error) })
+      .reduce(normalize, initialValue)
+  }).catch(error => { console.error('request -> ', error) })
 }
 
 export const fetchHotVideos = (subreddit, accessToken) => {
