@@ -51,7 +51,6 @@ export function getHotVideos (subreddit) {
     return fetchHotVideos(subreddit, accessToken).then(videos => {
       dispatch(addVideosById(videos.mappedToId))
       dispatch(userActions.setNextVideos(videos.sortedById))
-      dispatch(userActions.getNextVideo())
     }).catch(error => {
       console.error('getHotVideos -> ', error)
     })

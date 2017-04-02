@@ -3,9 +3,9 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import getYoutubeId from 'get-youtube-id'
 
+import { setPreviouslyPlayedVideo, setNextVideo, selector } from '../redux/modules/user'
 import { getHotVideos } from '../redux/modules/videos'
 import { getAccessToken } from '../redux/modules/authorization'
-import { getPreviouslyPlayedVideo, getNextVideo } from '../redux/modules/user'
 import YouTube from '../components/YouTube'
 import '../style/style.css'
 
@@ -16,7 +16,9 @@ export class Television extends Component {
 
   componentDidMount () {
     this.props.getAccessToken().then(() => {
-      this.props.getHotVideos('videos')
+      return this.props.getHotVideos('videos')
+    }).then(() => {
+      this.props.setNextVideo()
     })
   }
 
@@ -32,17 +34,18 @@ export class Television extends Component {
         rel: 0
       }
     }
-    if (this.props.user.current) {
-      let videoId = getYoutubeId(this.props.videos.byId[this.props.user.current].url)
-      let videoTitle = this.props.videos.byId[this.props.user.current].title
-      let upNextTitle = this.props.videos.byId[this.props.user.upNext[0]].title
+    if (this.props.currentVideo) {
+      let videoId = getYoutubeId(this.props.currentVideo.url)
+      let videoTitle = this.props.currentVideo.title
+      let upNextTitle = this.props.nextVideo.title
       return (
         <div>
           <h2>Up Next: {upNextTitle}</h2>
           <h1>{videoTitle}</h1>
-          <input type='button' onClick={this.props.getPreviouslyPlayedVideo} value='prev' />
+          <input type='button' onClick={() => this.props.getHotVideos('videos')} value='more' />
+          <input type='button' onClick={this.props.setPreviouslyPlayedVideo} value='prev' />
           <YouTube videoId={videoId} opts={opts} />
-          <input type='button' onClick={this.props.getNextVideo} value='next' />
+          <input type='button' onClick={this.props.setNextVideo} value='next' />
         </div>
       )
     }
@@ -50,10 +53,11 @@ export class Television extends Component {
   }
 }
 
-const mapStateToProps = ({ videos, user }) => ({ videos, user })
+const mapStateToProps = state => selector(state)
+
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    getHotVideos, getAccessToken, getPreviouslyPlayedVideo, getNextVideo
+    getHotVideos, getAccessToken, setPreviouslyPlayedVideo, setNextVideo
   }, dispatch)
 }
 
