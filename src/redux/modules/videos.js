@@ -1,11 +1,13 @@
 import { fetchHotVideos } from '../reddit'
 import * as userActions from './user'
+import { FETCHED, FETCHING } from '../constants'
 
 const ADD_VIDEOS_BY_ID = 'TelevisionForReddit/videos/ADD_VIDEOS_BY_ID'
+const FETCHING_VIDEOS = 'TelevisionForReddit/videos/FETCHING_VIDEOS'
 
 const initialState = {
   byId: {},
-  fetchingStatus: 'DONE'
+  fetchingStatus: FETCHED
 }
 
 export default function reducer (state = initialState, action) {
@@ -15,8 +17,16 @@ export default function reducer (state = initialState, action) {
         byId: {
           ...state.byId,
           ...action.videos
-        }
+        },
+        fetchingStatus: initialState.fetchingStatus
       }
+
+    case FETCHING_VIDEOS:
+      return {
+        ...state,
+        fetchingStatus: FETCHING
+      }
+
     default:
       return state
   }
@@ -28,24 +38,19 @@ export default function reducer (state = initialState, action) {
 
 const addVideosById = videos => ({ type: ADD_VIDEOS_BY_ID, videos })
 
+const fetchingVideos = () => ({ type: FETCHING_VIDEOS })
+
 /**
  * Thunks
  */
 
 export function getHotVideos (subreddit) {
-  return function (dispatch, getState) {
+  return (dispatch, getState) => {
+    dispatch(fetchingVideos())
     const accessToken = getState().authorization.accessToken
     return fetchHotVideos(subreddit, accessToken).then(videos => {
-      // ---- Move this to reddit.js -----
-      const youtubeVideos = videos.filter(video => video.domain.match(/^(youtube.com|youtu.be)$/))
-      const mapToIds = {}
-      youtubeVideos.forEach(video => {
-        mapToIds[video.id] = video
-      })
-      const sortedByIds = youtubeVideos.map(video => video.id)
-      // --------------------------------
-      dispatch(addVideosById(mapToIds))
-      dispatch(userActions.setNextVideos(sortedByIds))
+      dispatch(addVideosById(videos.mappedToId))
+      dispatch(userActions.setNextVideos(videos.sortedById))
       dispatch(userActions.getNextVideo())
     }).catch(error => {
       console.error('getHotVideos -> ', error)

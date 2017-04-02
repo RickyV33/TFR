@@ -13,7 +13,16 @@ const request = (path, accessToken) => {
   }
 
   return axios(`${REDDIT}${path}`, options).then(response => {
-    return response.data.data.children.map(entry => entry.data)
+    const initialValue = { mappedToId: {}, sortedById: [] }
+    return response.data.data.children
+      .map(entry => entry.data)
+      .filter(video => video.domain.match(/^(youtube.com|youtu.be)$/))
+      .map(video => ({[video.id]: video}))
+      .reduce((accum, video) => {
+        accum.mappedToId = { ...accum.mappedToId, ...video}
+        accum.sortedById.push(video.id)
+        return accum
+      }, initialValue)
   }).catch(error => { console.error('request() -> ', error) })
 }
 
