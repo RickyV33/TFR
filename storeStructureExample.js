@@ -1,27 +1,28 @@
 let store = {
   user: {
     currentNetworkId: '',
-    currentChannelId: '' // has to be in the channels for the current network
   },
   entities: {
     videos: {
-      byId: {}
+      byId: {},
+      fetchingStatus: 'FETCHED/FETCHING'
     },
     networks: {
       byId: {
         0: {
           name: 'videos',
           channels: [0, 1, 2], // then use these to grab the name for tabs
-          lastChannel: '',
+          currentChannel: '',
           id: 0
         },
         1: {
           name: 'rickandmorty',
           channels: [],
-          lastChannel: '',
+          currentChannel: '',
           id: 1
         },
       }
+      allIds: [0, 1]
     },
     channels: {
       byId: {
