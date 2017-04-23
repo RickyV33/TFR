@@ -1,4 +1,4 @@
-import { fetchHotVideos } from '../reddit'
+import { request } from '../reddit'
 import * as userActions from './user'
 import { FETCHED, FETCHING } from '../constants'
 
@@ -44,15 +44,15 @@ const fetchingVideos = () => ({ type: FETCHING_VIDEOS })
  * Thunks
  */
 
-export function getHotVideos (subreddit) {
+export function getVideos (network, channel) {
   return (dispatch, getState) => {
-    dispatch(fetchingVideos())
-    const accessToken = getState().authorization.accessToken
-    return fetchHotVideos(subreddit, accessToken).then(videos => {
-      dispatch(addVideosById(videos.mappedToId))
-      dispatch(userActions.setNextVideos(videos.sortedById))
-    }).catch(error => {
-      console.error('getHotVideos -> ', error)
-    })
+    // dispatch(fetchingVideos())
+    // const accessToken = getState().authorization.accessToken
+    // return request(network, accessToken).then(videos => {
+    //   dispatch(addVideosById(videos.mappedToId))
+    //   dispatch(userActions.setNextVideos(videos.sortedById))
+    // }).catch(error => {
+    //   console.error('getHotVideos -> ', error)
+    // })
   }
 }
