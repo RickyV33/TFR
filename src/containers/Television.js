@@ -16,9 +16,9 @@ export class Television extends Component {
 
   componentDidMount () {
     this.props.getAccessToken().then(() => {
-      return this.props.getHotVideos('videos')
+      // return this.props.getHotVideos('videos')
     }).then(() => {
-      this.props.getNextVideo()
+      // this.props.getNextVideo()
     })
   }
 
