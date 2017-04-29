@@ -9,7 +9,7 @@ const UPDATE_AFTER = 'TelevisionForReddit/channels/UPDATE_AFTER'
 const initialState = {
   currentChannelId: 0,
   0: {
-    name: 'Hot',
+    name: 'hot',
     next: [],
     current: '',
     previous: [],
@@ -20,17 +20,12 @@ const initialState = {
 export default function reducer (state = initialState, action) {
   const currentChannelId = state.currentChannelId
   const currentChannel = state[currentChannelId]
-  if (currentChannel) {
-    const previous = currentChannel.previous
-    const current = currentChannel.current
-    const next = currentChannel.next
-  }
 
   switch (action.type) {
     case GET_PREVIOUS_VIDEO:
       return {
         ...state,
-        currentChannelId: {
+        [currentChannelId]: {
           ...currentChannel,
           next: [currentChannel.current, ...currentChannel.next],
           current: currentChannel.previous.slice(-1).pop(),
@@ -41,35 +36,35 @@ export default function reducer (state = initialState, action) {
     case GET_NEXT_VIDEO:
       return {
         ...state,
-        currentChannelId: {
+        [currentChannelId]: {
           ...currentChannel,
           previous: current ? [...previous, current] : initialState.previous,
-          current: next[0],
-          next: next.slice(1)
+          current: currentChannel.next[0],
+          next: currentChannel.next.slice(1)
         }
       }
 
     case ADD_NEXT_VIDEOS:
       return {
         ...state,
-        currentChannelId: {
+        [currentChannelId]: {
           ...currentChannel,
-          next: [...next, ...action.videos]
+          next: [...currentChannel.next, ...action.videos]
         }
       }
 
     case UPDATE_CURRENT_CHANNEL_ID:
       return {
         ...state,
-        currentChannelId: action.currentChannelId
+        [currentChannelId]: action.currentChannelId
       }
 
     case UPDATE_AFTER:
       return {
         ...state,
-        currentChannelId: {
+        [currentChannelId]: {
           ...currentChannel,
-          after: action.payload.after
+          after: action.after
         }
       }
 
