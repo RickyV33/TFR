@@ -1,4 +1,5 @@
 import { request } from '../reddit'
+import { addNextVideos, updateAfter } from './channels'
 import { FETCHED, FETCHING } from '../constants'
 
 const ADD_VIDEOS_BY_ID = 'TelevisionForReddit/videos/ADD_VIDEOS_BY_ID'
@@ -14,6 +15,7 @@ export default function reducer (state = initialState, action) {
   switch (action.type) {
     case ADD_VIDEOS_BY_ID:
       return {
+        ...state,
         byId: {
           ...state.byId,
           ...action.videos
@@ -53,13 +55,15 @@ const fetchedVideos = () => ({ type: FETCHED_VIDEOS })
 
 export function getVideos (network, channel, after) {
   return (dispatch, getState) => {
-    // dispatch(fetchingVideos())
-    // const accessToken = getState().authorization.accessToken
-    // return request(network, accessToken).then(videos => {
-    //   dispatch(addVideosById(videos.mappedToId))
-    //   dispatch(userActions.setNextVideos(videos.sortedById))
-    // }).catch(error => {
-    //   console.error('getHotVideos -> ', error)
-    // })
+    dispatch(fetchingVideos())
+    const accessToken = getState().authorization.accessToken
+    return request(network, channel, accessToken, after).then(videos => {
+      dispatch(addVideosById(videos.mappedToId))
+      dispatch(addNextVideos(videos.sortedById))
+      dispatch(updateAfter(videos.after))
+      return dispatch(fetchedVideos())
+    }).catch(error => {
+      console.error('getHotVideos -> ', error)
+    })
   }
 }
