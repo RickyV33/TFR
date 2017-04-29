@@ -6,9 +6,10 @@ const initialState = {
 
 export default function reducer (state = initialState, action) {
   switch (action.type) {
+
     case UPDATE_CURRENT_NETWORK:
       return {
-        currentNetworkId: action.payload
+        currentNetworkId: action.networkId
       }
 
     default:
@@ -23,6 +24,6 @@ export default function reducer (state = initialState, action) {
 export const updateCurrentNetwork = networkId => {
   return {
     type: UPDATE_CURRENT_NETWORK,
-    payload: networkId
+    networkId
   }
 }
