@@ -3,9 +3,10 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import getYoutubeId from 'get-youtube-id'
 
-import { getPreviousVideo, getNextVideo, selector } from '../redux/modules/user'
-import { getHotVideos } from '../redux/modules/videos'
 import { getAccessToken } from '../redux/modules/authorization'
+import { selectCurrentChannel } from '../redux/modules/channels'
+import { selectCurrentNetwork } from '../redux/modules/networks'
+import { getVideos } from '../redux/modules/videos'
 import YouTube from '../components/YouTube'
 import '../style/style.css'
 
@@ -14,9 +15,13 @@ export class Television extends Component {
     super(props)
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.props.getAccessToken().then(() => {
-      // return this.props.getHotVideos('videos')
+      const { getVideos, currentChannel, currentNetwork } = this.props
+      const currentChannelAfter = currentChannel.after
+      const currentChannelName = currentChannel.name
+      const currentNetworkName = currentNetwork.name
+      return getVideos(currentNetworkName, currentChannelName, currentChannelAfter)
     }).then(() => {
       // this.props.getNextVideo()
     })
@@ -34,30 +39,34 @@ export class Television extends Component {
         rel: 0
       }
     }
-    if (this.props.currentVideo) {
-      let videoId = getYoutubeId(this.props.currentVideo.url)
-      let videoTitle = this.props.currentVideo.title
-      let upNextTitle = this.props.nextVideo.title
-      return (
-        <div>
-          <h2>Up Next: {upNextTitle}</h2>
-          <h1>{videoTitle}</h1>
-          <input type='button' onClick={() => this.props.getHotVideos('videos')} value='more' />
-          <input type='button' disabled={this.props.previousVideo} onClick={this.props.getPreviousVideo} value='prev' />
-          <YouTube videoId={videoId} opts={opts} />
-          <input type='button' onClick={this.props.getNextVideo} value='next' />
-        </div>
-      )
-    }
-    return <div>loading</div>
+    // console.log(this.props.currentChannel)
+    // console.log(this.props.currentNetwork)
+      // let videoId = getYoutubeId(this.props.currentVideo.url)
+      // let videoTitle = this.props.currentVideo.title
+      // let upNextTitle = this.props.nextVideo.title
+          // <input type='button' onClick={() => this.props.getHotVideos('videos')} value='more' />
+          // <input type='button' disabled={this.props.previousVideo} onClick={this.props.getPreviousVideo} value='prev' />
+          // <YouTube videoId={videoId} opts={opts} />
+          // <input type='button' onClick={this.props.getNextVideo} value='next' />
+    return (
+      <div>
+        <h1>{this.props.currentNetwork.name}</h1>
+        <h1>{this.props.currentChannel.name}</h1>
+      </div>
+    )
   }
 }
 
-const mapStateToProps = state => selector(state)
+const mapStateToProps = state => {
+  return {
+    currentChannel: selectCurrentChannel(state),
+    currentNetwork: selectCurrentNetwork(state)
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    getHotVideos, getAccessToken, getPreviousVideo, getNextVideo
+    getAccessToken, getVideos
   }, dispatch)
 }
 
