@@ -1,9 +1,9 @@
 import { request } from '../reddit'
-import * as userActions from './user'
 import { FETCHED, FETCHING } from '../constants'
 
 const ADD_VIDEOS_BY_ID = 'TelevisionForReddit/videos/ADD_VIDEOS_BY_ID'
 const FETCHING_VIDEOS = 'TelevisionForReddit/videos/FETCHING_VIDEOS'
+const FETCHED_VIDEOS = 'TelevisionForReddit/videos/FETCHED_VIDEOS'
 
 const initialState = {
   byId: {},
@@ -17,14 +17,19 @@ export default function reducer (state = initialState, action) {
         byId: {
           ...state.byId,
           ...action.videos
-        },
-        fetchingStatus: initialState.fetchingStatus
+        }
       }
 
     case FETCHING_VIDEOS:
       return {
         ...state,
         fetchingStatus: FETCHING
+      }
+
+    case FETCHED_VIDEOS:
+      return {
+        ...state,
+        fetchingStatus: FETCHED
       }
 
     default:
@@ -40,11 +45,13 @@ const addVideosById = videos => ({ type: ADD_VIDEOS_BY_ID, videos })
 
 const fetchingVideos = () => ({ type: FETCHING_VIDEOS })
 
+const fetchedVideos = () => ({ type: FETCHED_VIDEOS })
+
 /**
  * Thunks
  */
 
-export function getVideos (network, channel) {
+export function getVideos (network, channel, after) {
   return (dispatch, getState) => {
     // dispatch(fetchingVideos())
     // const accessToken = getState().authorization.accessToken
