@@ -1,9 +1,12 @@
+import { createSelector, createStructuredSelector } from 'reselect'
+
 const ADD_NETWORK = 'TelevisionForReddit/networks/ADD_NETWORK'
 const ADD_CHANNEL_TO_NETWORK = 'TelevisionForReddit/networks/ADD_CHANNEL_TO_NETWORK'
-const UPDATE_CURRENT_CHANNEL = 'TelevisionForReddit/networks/UPDATE_CURRENT_CHANNEL'
+const UPDATE_CURRENT_NETWORK = 'TelevisionForReddit/networks/UPDATE_CURRENT_NETWORK'
 
 let id = 0
 const initialState = {
+  currentNetworkId: 0,
   byId: {
     0: {
       name: 'videos',
@@ -11,48 +14,43 @@ const initialState = {
       currentChannel: '',
       id: 0
     }
-  }
+  },
   allIds: [0]
 }
 
 export default function reducer (state = initialState, action) {
+  const networkId = action.networkId
+  const network = state.byId[networkId]
+  let updatedNetwork
+
   switch (action.type) {
     case ADD_NETWORK:
       return {
         ...state,
         byId: {
           ...state.byId,
-          action.payload.id: action.payload
+          networkId: action.network
         },
-        allIds: [...allIds, action.payload.id]
+        allIds: [...allIds, networkId]
       }
 
     case ADD_CHANNEL_TO_NETWORK:
-      const network = state.byId[action.payload.networkId]
-      const updatedNetwork = {
+      updatedNetwork = {
         ...network,
-        channels: [...network.channels, action.payload.channelId]
+        channels: [...network.channels, action.channelId]
       }
       return {
         ...state,
         byId: {
           ...state.byId,
-          action.payload.networkId: updatedNetwork
+          networkId: updatedNetwork
         }
       }
 
-    case UPDATE_CURRENT_CHANNEL:
-      const network = state.byId[action.payload.networkId]
-      const updatedNetwork = {
-        ...network,
-        currentChannel: action.payload.channelId
-      }
+    case UPDATE_CURRENT_NETWORK:
       return {
         ...state,
-        byId: {
-          ...state.byId,
-          action.payload.networkId: updatedNetwork
-        }
+        currentNetworkId: action.payload.networkId
       }
 
     default:
@@ -64,32 +62,40 @@ export default function reducer (state = initialState, action) {
  * Action Creators
  */
 
-const addNetwork = network = {
+const addNetwork = network => {
+  let updatedId = ++id
   return {
     type: ADD_NETWORK,
-    payload:  {
+    network: {
       ...network,
-       ++id
-     }
+      id: updatedId
+    },
+    updatedId
   }
 }
 
-const addChannelToNetwork = (networkId, channelId) = {
+const addChannelToNetwork = (networkId, channelId) => {
   return {
     type: ADD_CHANNEL_TO_NETWORK,
-    payload: {
-      networkId,
-      channelId
-    }
+    networkId,
+    channelId
   }
 }
 
-const updateCurrentChannel = (networkId, channelId) = {
+const updateCurrentNetwork = networkId => {
   return {
-    type: ADD_CHANNEL_TO_NETWORK,
-    payload: {
-      networkId,
-      channelId
-    }
+    type: UPDATE_CURRENT_NETWORK,
+    networkId
   }
 }
+
+/**
+ * Selectors
+ */
+
+const currentNetworkId = state => state.entities.networks.currentNetworkId
+const networks = state => state.entities.networks.byId
+
+export const selectCurrentNetwork = createSelector(
+  [currentNetworkId, networks],
+  (currentNetworkId, networks) => networks[currentNetworkId])
