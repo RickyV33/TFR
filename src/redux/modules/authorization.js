@@ -3,6 +3,7 @@ import { FETCHED, FETCHING } from '../constants'
 
 const GET_ACCESS_TOKEN = 'TelevisionForReddit/authorization/GET_ACCESS_TOKEN'
 const FETCHING_ACCESS_TOKEN = 'TelevisionForReddit/authorization/FETCHING_ACCESS_TOKEN'
+const FETCHED_ACCESS_TOKEN = 'TelevisionForReddit/authorization/FETCHED_ACCESS_TOKEN'
 
 const initialState = {
   accessToken: '',
@@ -23,6 +24,13 @@ export default function reducer (state = initialState, { type, accessToken }) {
         ...state,
         fetchingStatus: FETCHING
       }
+
+    case FETCHING_ACCESS_TOKEN:
+      return {
+        ...state,
+        fetchingStatus: FETCHED
+      }
+
     default:
       return state
   }
@@ -34,7 +42,9 @@ export default function reducer (state = initialState, { type, accessToken }) {
 
 const setAccessToken = accessToken => ({ type: GET_ACCESS_TOKEN, accessToken })
 
-const fetchingAccessToken = accessToken => ({ type: FETCHING_ACCESS_TOKEN })
+const fetchingAccessToken = () => ({ type: FETCHING_ACCESS_TOKEN })
+
+const fetchedAccessToken = () => ({ type: FETCHED_ACCESS_TOKEN })
 
 /**
  * Thunks
@@ -43,9 +53,10 @@ const fetchingAccessToken = accessToken => ({ type: FETCHING_ACCESS_TOKEN })
 export function getAccessToken () {
   return dispatch => {
     dispatch(fetchingAccessToken())
-    return authorize().then(data =>
+    return authorize().then(data => {
       dispatch(setAccessToken(data.access_token))
-    ).catch(error => {
+      return dispatch(fetchedAccessToken())
+    }).catch(error => {
       console.error('getAccessToken() -> ', error)
     })
   }
