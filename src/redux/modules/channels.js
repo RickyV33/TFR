@@ -1,12 +1,11 @@
-import { createStructuredSelector } from 'reselect'
-// import isEqual from 'lodash.isEqual'
+import { createSelector, createStructuredSelector } from 'reselect'
 import { isEqual } from 'lodash'
 
-const GET_PREVIOUS_VIDEO = 'TelevisionForReddit/user/GET_PREVIOUS_VIDEO'
-const GET_NEXT_VIDEO = 'TelevisionForReddit/user/GET_NEXT_VIDEO'
-const SET_NEXT_VIDEOS = 'TelevisionForReddit/user/SET_NEXT_VIDEOS'
-const SET_CURRENT_CHANNEL_ID = 'TelevisionForReddit/user/SET_CURRENT_CHANNEL_ID'
-const SET_AFTER = 'TelevisionForReddit/user/SET_AFTER'
+const GET_PREVIOUS_VIDEO = 'TelevisionForReddit/channels/GET_PREVIOUS_VIDEO'
+const GET_NEXT_VIDEO = 'TelevisionForReddit/channels/GET_NEXT_VIDEO'
+const ADD_NEXT_VIDEOS = 'TelevisionForReddit/channels/ADD_NEXT_VIDEOS'
+const UPDATE_CURRENT_CHANNEL_ID = 'TelevisionForReddit/channels/UPDATE_CURRENT_CHANNEL_ID'
+// const SET_AFTER = 'TelevisionForReddit/channels/SET_AFTER'
 
 const initialState = {
   currentChannelId: 0,
@@ -20,12 +19,13 @@ const initialState = {
 export default function reducer (state = initialState, action) {
   const currentChannelId = state.currentChannelId
   const currentChannel = state[currentChannelId]
-  const previous = currentChannel.previous
-  const current = currentChannel.current
-  const next = currentChannel.next
+  if (currentChannel) {
+    const previous = currentChannel.previous
+    const current = currentChannel.current
+    const next = currentChannel.next
+  }
 
   switch (action.type) {
-
     case GET_PREVIOUS_VIDEO:
       return {
         ...state,
@@ -46,7 +46,7 @@ export default function reducer (state = initialState, action) {
         }
       }
 
-    case SET_NEXT_VIDEOS:
+    case ADD_NEXT_VIDEOS:
       return {
         ...state,
         currentChannelId: {
@@ -54,7 +54,7 @@ export default function reducer (state = initialState, action) {
         }
       }
 
-    case SET_CURRENT_CHANNEL_ID:
+    case UPDATE_CURRENT_CHANNEL_ID:
       return {
         ...state,
         currentChannelId: action.currentChannelId
@@ -73,14 +73,17 @@ export const getPreviousVideo = () => ({ type: GET_PREVIOUS_VIDEO })
 
 export const getNextVideo = () => ({ type: GET_NEXT_VIDEO })
 
-export const setNextVideos = videos => ({ type: SET_NEXT_VIDEOS, videos })
+export const addNextVideos = videos => ({ type: ADD_NEXT_VIDEOS, videos })
+
+export const updateCurrentChannelId = channelId => ({ type: UPDATE_CURRENT_CHANNEL_ID, channelId })
 
 /**
  * Selectors
  */
 
-const previousVideo = state => state.videos.byId[state.user.previous.slice(-1).pop()]
-const currentVideo = state => state.videos.byId[state.user.current]
-const nextVideo = state => state.videos.byId[state.user.next[0]]
+const currentChannelId = state => state.entities.channels.currentChannelId
+const channels = state => state.entities.channels
 
-export const selector = createStructuredSelector({ previousVideo, currentVideo, nextVideo })
+export const selectCurrentChannel = createSelector(
+  [currentChannelId, channels],
+  (currentChannelId, channels) => channels[currentChannelId])
