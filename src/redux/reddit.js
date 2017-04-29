@@ -7,8 +7,8 @@ const normalize = (accum, video) => {
   return accum
 }
 
-const request = (network, channel, accessToken, after = null) => {
-  const url = `https://oauth.reddit.com/r/${subreddit}/${channel}`
+export const request = (network, channel, accessToken, after = null) => {
+  const url = `https://oauth.reddit.com/r/${network}/${channel}`
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`
@@ -19,9 +19,11 @@ const request = (network, channel, accessToken, after = null) => {
   }
 
   return axios(url, options).then(response => {
-    const initialValue = { mappedToId: {}, sortedById: [] }
-    return response.data.data.children
-      .filter(entry => entry.data.domain.match(/^(youtube.com|youtu.be)$/))
+    const data = response.data.data
+    const initialValue = { mappedToId: {}, sortedById: [], after: data.after}
+    return data.children
+      .map(entry => entry.data)
+      .filter(video => video.domain.match(/^(youtube.com|youtu.be)$/))
       .reduce(normalize, initialValue)
   }).catch(error => { console.error('request -> ', error) })
 }
