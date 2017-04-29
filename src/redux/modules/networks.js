@@ -11,7 +11,6 @@ const initialState = {
     0: {
       name: 'videos',
       channels: [],
-      currentChannel: '',
       id: 0
     }
   },
