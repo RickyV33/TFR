@@ -1,18 +1,19 @@
-import { createSelector, createStructuredSelector } from 'reselect'
-import { isEqual } from 'lodash'
+import { createSelector } from 'reselect'
 
 const GET_PREVIOUS_VIDEO = 'TelevisionForReddit/channels/GET_PREVIOUS_VIDEO'
 const GET_NEXT_VIDEO = 'TelevisionForReddit/channels/GET_NEXT_VIDEO'
 const ADD_NEXT_VIDEOS = 'TelevisionForReddit/channels/ADD_NEXT_VIDEOS'
 const UPDATE_CURRENT_CHANNEL_ID = 'TelevisionForReddit/channels/UPDATE_CURRENT_CHANNEL_ID'
-// const SET_AFTER = 'TelevisionForReddit/channels/SET_AFTER'
+const UPDATE_AFTER = 'TelevisionForReddit/channels/UPDATE_AFTER'
 
 const initialState = {
   currentChannelId: 0,
   0: {
+    name: 'Hot',
     next: [],
     current: '',
-    previous: []
+    previous: [],
+    after: null
   }
 }
 
@@ -30,6 +31,7 @@ export default function reducer (state = initialState, action) {
       return {
         ...state,
         currentChannelId: {
+          ...currentChannel,
           next: [currentChannel.current, ...currentChannel.next],
           current: currentChannel.previous.slice(-1).pop(),
           previous: currentChannel.previous.slice(0, previous.length - 1)
@@ -40,6 +42,7 @@ export default function reducer (state = initialState, action) {
       return {
         ...state,
         currentChannelId: {
+          ...currentChannel,
           previous: current ? [...previous, current] : initialState.previous,
           current: next[0],
           next: next.slice(1)
@@ -50,6 +53,7 @@ export default function reducer (state = initialState, action) {
       return {
         ...state,
         currentChannelId: {
+          ...currentChannel,
           next: [...next, ...action.videos]
         }
       }
@@ -58,6 +62,15 @@ export default function reducer (state = initialState, action) {
       return {
         ...state,
         currentChannelId: action.currentChannelId
+      }
+
+    case UPDATE_AFTER:
+      return {
+        ...state,
+        currentChannelId: {
+          ...currentChannel,
+          after: action.payload.after
+        }
       }
 
     default:
@@ -76,6 +89,8 @@ export const getNextVideo = () => ({ type: GET_NEXT_VIDEO })
 export const addNextVideos = videos => ({ type: ADD_NEXT_VIDEOS, videos })
 
 export const updateCurrentChannelId = channelId => ({ type: UPDATE_CURRENT_CHANNEL_ID, channelId })
+
+export const updateAfter = after => ({ type: UPDATE_AFTER, after })
 
 /**
  * Selectors
