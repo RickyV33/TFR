@@ -25,7 +25,7 @@ let store = {
         1: {
           id: 1,
           name: 'rickandmorty',
-          channels: [9, ...]
+          channels: [9, 10, 11, 12, 13, 14, 15, 16, 17]
         },
       }
       allIds: [0, 1]
@@ -105,53 +105,125 @@ let store = {
           next: [],
           after: ''
           id: 8
-        }
+        },
+        9: {
+          channelNameId: 8,
+    		  previous: [],
+          current: '',
+          next: [],
+          after: ''
+          id: 9
+        },
+        10: {
+          channelNameId: 8,
+    		  previous: [],
+          current: '',
+          next: [],
+          after: ''
+          id: 10
+        },
+        11: {
+          channelNameId: 8,
+    		  previous: [],
+          current: '',
+          next: [],
+          after: ''
+          id: 11
+        },
+        12: {
+          channelNameId: 8,
+    		  previous: [],
+          current: '',
+          next: [],
+          after: ''
+          id: 12
+        },
+        13: {
+          channelNameId: 8,
+    		  previous: [],
+          current: '',
+          next: [],
+          after: ''
+          id: 13
+        },
+        14: {
+          channelNameId: 8,
+    		  previous: [],
+          current: '',
+          next: [],
+          after: ''
+          id: 14
+        },
+        15: {
+          channelNameId: 8,
+    		  previous: [],
+          current: '',
+          next: [],
+          after: ''
+          id: 15
+        },
+        16: {
+          channelNameId: 8,
+    		  previous: [],
+          current: '',
+          next: [],
+          after: ''
+          id: 16
+        },
+        17: {
+          channelNameId: 8,
+    		  previous: [],
+          current: '',
+          next: [],
+          after: ''
+          id: 17
+        },
       }
     },
     channelNames: {
       byId: {
         0: {
-          name: 'hot',
+          name: 'Hot',
           url: 'hot',
           id: 0
         },
         1: {
-          name: 'new',
+          name: 'New',
           url: 'new',
           id: 1
         },
         2: {
-          name: 'rising',
+          name: 'Rising',
           url: 'rising',
           id: 2
         },
         3: {
-          name: 'top of the hour',
+          name: 'Top of the Hour',
           url: 'top/?sort=top&t=hour',
           id: 3
         },
         4: {
-          name: 'top of the day',
+          name: 'Top of the Day',
           url: 'top/?sort=top&t=day',
           id: 4
         },
         5: {
-          name: 'top of the week',
+          name: 'Top of the Week',
           url: 'top/?sort=top&t=week',
           id: 5
         },
         6: {
-          name: 'top of the month',
+          name: 'Top of the Month',
           url: 'top/?sort=top&t=month',
           id: 6
         },
         7: {
-          name: 'top of the year',
+          name: 'Top of the Year',
           url: 'top/?sort=top&t=year',
           id: 7
         },
         8: {
-          name: 'top of all time',
+          name: 'Top of All Time',
           url: 'top/?sort=top&t=all',
           id: 8
         }
