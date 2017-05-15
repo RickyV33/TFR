@@ -53,12 +53,6 @@ export default function reducer (state = initialState, action) {
         }
       }
 
-    case UPDATE_CURRENT_CHANNEL_ID:
-      return {
-        ...state,
-        [currentChannelId]: action.currentChannelId
-      }
-
     case UPDATE_AFTER:
       return {
         ...state,
