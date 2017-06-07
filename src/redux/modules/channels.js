@@ -50,21 +50,28 @@ function createChannels (channelNames, count) {
   }, initialState)
 }
 
+function getPreviousVideoHelper (currentChannel) {
+  if (currentChannel.next.length > 0) {
+    return {
+      ...currentChannel,
+      next: [currentChannel.current, ...currentChannel.next],
+      current: currentChannel.previous.slice(-1).pop(),
+      previous: currentChannel.previous.slice(0, previous.length - 1)
+    }
+  } else {
+    return currentChannel
+  }
+}
+
 export default function reducer (state = createChannels(channelNames, 0), action) {
-  const currentChannelId = state.currentChannelId
-  const currentChannel = state[currentChannelId]
+  const currentChannel = state[action.id]
 
   switch (action.type) {
     case GET_PREVIOUS_VIDEO:
-      // return {
-      //   ...state,
-      //   [currentChannelId]: {
-      //     ...currentChannel,
-      //     next: [currentChannel.current, ...currentChannel.next],
-      //     current: currentChannel.previous.slice(-1).pop(),
-      //     previous: currentChannel.previous.slice(0, previous.length - 1)
-      //   }
-      // }
+      return {
+        ...state,
+        [action.id]: getPreviousVideoHelper(currentChannel)
+      }
 
     case GET_NEXT_VIDEO:
       // return {
@@ -104,15 +111,13 @@ export default function reducer (state = createChannels(channelNames, 0), action
  * Action Creators
  */
 
-export const getPreviousVideo = () => ({ type: GET_PREVIOUS_VIDEO })
+export const getPreviousVideo = id => ({ type: GET_PREVIOUS_VIDEO, id })
 
-export const getNextVideo = () => ({ type: GET_NEXT_VIDEO })
+export const getNextVideo = id => ({ type: GET_NEXT_VIDEO, id })
 
-export const addNextVideos = videos => ({ type: ADD_NEXT_VIDEOS, videos })
+export const addNextVideos = (id, videos) => ({ type: ADD_NEXT_VIDEOS, videos, id })
 
-export const updateCurrentChannelId = channelId => ({ type: UPDATE_CURRENT_CHANNEL_ID, channelId })
-
-export const updateAfter = after => ({ type: UPDATE_AFTER, after })
+export const updateAfter = (id, after) => ({ type: UPDATE_AFTER, id, after })
 
 /**
  * Selectors
