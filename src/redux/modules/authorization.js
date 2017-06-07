@@ -25,7 +25,7 @@ export default function reducer (state = initialState, { type, accessToken }) {
         fetchingStatus: FETCHING
       }
 
-    case FETCHING_ACCESS_TOKEN:
+    case FETCHED_ACCESS_TOKEN:
       return {
         ...state,
         fetchingStatus: FETCHED

@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import getYoutubeId from 'get-youtube-id'
 
 import { getAccessToken } from '../redux/modules/authorization'
-import { selectCurrentChannel } from '../redux/modules/channels'
-import { selectCurrentNetwork } from '../redux/modules/networks'
+// import { selectCurrentChannel } from '../redux/modules/channels'
+// import { selectCurrentNetwork } from '../redux/modules/networks'
 import { getVideos } from '../redux/modules/videos'
 import YouTube from '../components/YouTube'
 import '../style/style.css'
@@ -16,15 +16,15 @@ export class Television extends Component {
   }
 
   componentWillMount () {
-    this.props.getAccessToken().then(() => {
-      const { getVideos, currentChannel, currentNetwork } = this.props
-      const currentChannelAfter = currentChannel.after
-      const currentChannelName = currentChannel.name
-      const currentNetworkName = currentNetwork.name
-      return getVideos(currentNetworkName, currentChannelName, currentChannelAfter)
-    }).then(() => {
-      // this.props.getNextVideo()
-    })
+    // this.props.getAccessToken().then(() => {
+    //   const { getVideos, currentChannel, currentNetwork } = this.props
+    //   const currentChannelAfter = currentChannel.after
+    //   const currentChannelName = currentChannel.name
+    //   const currentNetworkName = currentNetwork.name
+    //   return getVideos(currentNetworkName, currentChannelName, currentChannelAfter)
+    // }).then(() => {
+    //   // this.props.getNextVideo()
+    // })
   }
 
   render () {
@@ -48,10 +48,11 @@ export class Television extends Component {
           // <input type='button' disabled={this.props.previousVideo} onClick={this.props.getPreviousVideo} value='prev' />
           // <YouTube videoId={videoId} opts={opts} />
           // <input type='button' onClick={this.props.getNextVideo} value='next' />
+        // <h1>{this.props.currentNetwork.name}</h1>
+        // <h1>{this.props.currentChannel.name}</h1>
     return (
       <div>
-        <h1>{this.props.currentNetwork.name}</h1>
-        <h1>{this.props.currentChannel.name}</h1>
+        LOADED
       </div>
     )
   }
@@ -59,8 +60,8 @@ export class Television extends Component {
 
 const mapStateToProps = state => {
   return {
-    currentChannel: selectCurrentChannel(state),
-    currentNetwork: selectCurrentNetwork(state)
+    // currentChannel: selectCurrentChannel(state),
+    // currentNetwork: selectCurrentNetwork(state)
   }
 }
 
