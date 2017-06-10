@@ -62,6 +62,18 @@ function getPreviousVideoHelper (currentChannel) {
     return currentChannel
   }
 }
+function getNextVideoHelper (currentChannel) {
+  if (currentChannel.next.length > 0) {
+    return {
+      ...currentChannel,
+      previous: current ? [...previous, current] : initialState.previous,
+      current: currentChannel.next[0],
+      next: currentChannel.next.slice(1)
+    }
+  } else {
+    return currentChannel
+  }
+}
 
 export default function reducer (state = createChannels(channelNames, 0), action) {
   const currentChannel = state[action.id]
@@ -74,15 +86,10 @@ export default function reducer (state = createChannels(channelNames, 0), action
       }
 
     case GET_NEXT_VIDEO:
-      // return {
-      //   ...state,
-      //   [currentChannelId]: {
-      //     ...currentChannel,
-      //     previous: current ? [...previous, current] : initialState.previous,
-      //     current: currentChannel.next[0],
-      //     next: currentChannel.next.slice(1)
-      //   }
-      // }
+      return {
+        ...state,
+        [action.id]: getNextVideoHelper(currentChannel)
+      }
 
     case ADD_NEXT_VIDEOS:
       // return {
