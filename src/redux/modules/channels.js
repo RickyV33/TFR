@@ -4,20 +4,8 @@ import { channelNames } from './channelNames.js'
 
 const GET_PREVIOUS_VIDEO = 'TelevisionForReddit/channels/GET_PREVIOUS_VIDEO'
 const GET_NEXT_VIDEO = 'TelevisionForReddit/channels/GET_NEXT_VIDEO'
-const ADD_NEXT_VIDEOS = 'TelevisionForReddit/channels/ADD_NEXT_VIDEOS'
+const ADD_VIDEOS_TO_NEXT = 'TelevisionForReddit/channels/ADD_VIDEOS_TO_NEXT'
 const UPDATE_AFTER = 'TelevisionForReddit/channels/UPDATE_AFTER'
-
-const initialState = {
-  currentChannelId: 0,
-  0: {
-    name: 'hot',
-    next: [],
-    current: '',
-    previous: [],
-    after: null,
-    id: 0
-  }
-}
 
 function createChannel (id, nameId) {
   const templateChannel = {
@@ -50,64 +38,92 @@ function createChannels (channelNames, count) {
   }, initialState)
 }
 
-function getPreviousVideoHelper (currentChannel) {
-  if (currentChannel.next.length > 0) {
-    return {
-      ...currentChannel,
-      next: [currentChannel.current, ...currentChannel.next],
-      current: currentChannel.previous.slice(-1).pop(),
-      previous: currentChannel.previous.slice(0, previous.length - 1)
+function shiftVideos (source, current, destination) {
+  let videos
+  if (source.length > 0) {
+    videos = {
+      source: source.slice(1),
+      current: source[0],
+      destination: current ? [current, ...destination] : []
     }
   } else {
-    return currentChannel
+    videos = {
+      source,
+      current,
+      destination
+    }
+  }
+  return video
+}
+
+function addToById (state, id, payload) {
+  return {
+    ...state.byId,
+    [id]: {
+      ...state.byId[id],
+      ...payload
+    }
   }
 }
-function getNextVideoHelper (currentChannel) {
-  if (currentChannel.next.length > 0) {
-    return {
-      ...currentChannel,
-      previous: current ? [...previous, current] : initialState.previous,
-      current: currentChannel.next[0],
-      next: currentChannel.next.slice(1)
-    }
-  } else {
-    return currentChannel
-  }
+
+function addToAllIds (state, id) {
+  return [...state.allIds, id]
 }
 
 export default function reducer (state = createChannels(channelNames, 0), action) {
-  const currentChannel = state[action.id]
+  const currentChannel = state.byId[action.id]
+  let previous, current, next
+  if (currentChannel) {
+    previous = currentChannel.previous
+    current = currentChannel.current
+    next = currentChannel.next
+  }
+  let shiftedVideos
+  let payload
 
   switch (action.type) {
     case GET_PREVIOUS_VIDEO:
+      shiftedVideos = shiftVideos(previous, current, next)
+      payload = {
+        next: shiftedVideos.destination,
+        current: shiftedVideos.current,
+        previous: shiftedVideos.previous
+      }
       return {
         ...state,
-        [action.id]: getPreviousVideoHelper(currentChannel)
+        byId: addToById(state, action.id, payload)
       }
 
     case GET_NEXT_VIDEO:
+      shiftedVideos = shiftVideos(next, current, previous)
+      payload = {
+        next: shiftedVideos.previous,
+        current: shiftedVideos.current,
+        previous: shiftedVideos.destination
+      }
       return {
         ...state,
-        [action.id]: getNextVideoHelper(currentChannel)
+        byId: addToById(state, action.id, payload)
       }
 
-    case ADD_NEXT_VIDEOS:
-      // return {
-      //   ...state,
-      //   [currentChannelId]: {
-      //     ...currentChannel,
-      //     next: [...currentChannel.next, ...action.videos]
-      //   }
-      // }
+    case ADD_VIDEOS_TO_NEXT:
+      payload = {
+        next: [...currentChannel.next, ...action.videos]
+      }
+      return {
+        ...state,
+        byId: addToById(state, action.id, payload),
+        allIds: addToAllIds(state, action.id)
+      }
 
     case UPDATE_AFTER:
-      // return {
-      //   ...state,
-      //   [currentChannelId]: {
-      //     ...currentChannel,
-      //     after: action.after
-      //   }
-      // }
+      payload = {
+        after: action.after
+      }
+      return {
+        ...state,
+        byId: addToById(state, action.id, payload)
+      }
 
     default:
       return state
@@ -122,7 +138,7 @@ export const getPreviousVideo = id => ({ type: GET_PREVIOUS_VIDEO, id })
 
 export const getNextVideo = id => ({ type: GET_NEXT_VIDEO, id })
 
-export const addNextVideos = (id, videos) => ({ type: ADD_NEXT_VIDEOS, videos, id })
+export const addNextVideos = (id, videos) => ({ type: ADD_VIDEOS_TO_NEXT, videos, id })
 
 export const updateAfter = (id, after) => ({ type: UPDATE_AFTER, id, after })
 
