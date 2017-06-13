@@ -1,6 +1,6 @@
 import { request } from '../reddit'
 import { addVideosToNext } from './channels'
-import { FETCHED, FETCHING } from '../constants'
+import { FETCHED, FETCHING } from './entityHelper'
 
 const ADD_VIDEOS_BY_ID = 'TelevisionForReddit/videos/ADD_VIDEOS_BY_ID'
 const FETCHING_VIDEOS = 'TelevisionForReddit/videos/FETCHING_VIDEOS'

@@ -2,6 +2,8 @@ import { createSelector, createStructuredSelector } from 'reselect'
 import shortid from 'shortid'
 import { combineReducers } from 'redux'
 
+import { addToById, addToAllIds } from './entityHelper'
+
 const ADD_NETWORK = 'TelevisionForReddit/networks/ADD_NETWORK'
 const ADD_CHANNEL_TO_NETWORK = 'TelevisionForReddit/networks/ADD_CHANNEL_TO_NETWORK'
 
@@ -12,20 +14,6 @@ function createNetwork (name, channels) {
     name,
     channels: channels || []
   }
-}
-
-function addToById (state, payload) {
-  return {
-    ...state,
-    [payload.id]: {
-      ...state[payload.id],
-      ...payload
-    }
-  }
-}
-
-function addToAllIds (state, id) {
-  return [...state.allIds, id]
 }
 
 const initialState = createNetwork('videos')

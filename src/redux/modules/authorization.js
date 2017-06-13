@@ -1,5 +1,5 @@
 import { authorize } from '../reddit'
-import { FETCHED, FETCHING } from '../constants'
+import { FETCHED, FETCHING } from './entityHelper'
 
 const GET_ACCESS_TOKEN = 'TelevisionForReddit/authorization/GET_ACCESS_TOKEN'
 const FETCHING_ACCESS_TOKEN = 'TelevisionForReddit/authorization/FETCHING_ACCESS_TOKEN'

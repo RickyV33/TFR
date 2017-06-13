@@ -3,6 +3,7 @@ import shortid from 'shortid'
 import { combineReducers } from 'redux'
 
 import { channelNames } from './channelNames.js'
+import { addToById, addToAllIds } from './entityHelper'
 
 const GET_PREVIOUS_VIDEO = 'TelevisionForReddit/channels/GET_PREVIOUS_VIDEO'
 const GET_NEXT_VIDEO = 'TelevisionForReddit/channels/GET_NEXT_VIDEO'
@@ -57,20 +58,6 @@ function shiftVideos (source, current, destination) {
     }
   }
   return video
-}
-
-function addToById (state, payload) {
-  return {
-    ...state,
-    [payload.id]: {
-      ...state[payload.id],
-      ...payload
-    }
-  }
-}
-
-function addToAllIds (state, id) {
-  return [...state.allIds, id]
 }
 
 const initialState = createChannels(channelNames)
