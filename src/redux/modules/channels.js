@@ -94,6 +94,7 @@ function channelsById (state = initialState.byId, action) {
         previous: shiftedVideos.previous
       }
       return addToById(state, payload)
+
     case GET_NEXT_VIDEO:
       shiftedVideos = shiftVideos(next, current, previous)
       payload = {

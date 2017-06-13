@@ -1,76 +1,74 @@
 import { createSelector, createStructuredSelector } from 'reselect'
+import shortid from 'shortid'
+import { combineReducers } from 'redux'
 
 const ADD_NETWORK = 'TelevisionForReddit/networks/ADD_NETWORK'
 const ADD_CHANNEL_TO_NETWORK = 'TelevisionForReddit/networks/ADD_CHANNEL_TO_NETWORK'
 
-let id = 0
-const initialState = {
-  currentNetworkId: 0,
-  byId: {
-    0: {
-      name: 'videos',
-      channels: [],
-      id: 0
-    }
-  },
-  allIds: [0]
+function createNetwork (name, channels) {
+  const id = shortid.generate()
+  return {
+    id,
+    name,
+    channels: channels || []
+  }
 }
 
-export default function reducer (state = initialState, action) {
-  const networkId = action.networkId
-  const network = state.byId[networkId]
-  let updatedNetwork
+function addToById (state, payload) {
+  return {
+    ...state,
+    [payload.id]: {
+      ...state[payload.id],
+      ...payload
+    }
+  }
+}
 
+function addToAllIds (state, id) {
+  return [...state.allIds, id]
+}
+
+const initialState = createNetwork('videos')
+
+function networksById (state = initialState, action) {
   switch (action.type) {
     case ADD_NETWORK:
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          networkId: action.network
-        },
-        allIds: [...allIds, networkId]
+      const { name, id, channels } = action
+      const payload = {
+        name,
+        id,
+        channels
       }
-
-    case ADD_CHANNEL_TO_NETWORK:
-      updatedNetwork = {
-        ...network,
-        channels: [...network.channels, action.channelId]
-      }
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          networkId: updatedNetwork
-        }
-      }
+      return addToById(state, payload)
 
     default:
       return state
   }
 }
 
+function allNetworks (state = [initialState.id], action) {
+  switch (action.type) {
+    case ADD_NETWORK:
+      return addToAllIds(state, action.id)
+
+    default:
+      return state
+  }
+}
+
+export default combineReducers({
+  byId: networksById,
+  allIds: allNetworks
+})
+
 /**
  * Action Creators
  */
 
-const addNetwork = network => {
-  let updatedId = ++id
+const addNetwork = (name, channels) => {
   return {
     type: ADD_NETWORK,
-    network: {
-      ...network,
-      id: updatedId
-    },
-    updatedId
-  }
-}
-
-const addChannelToNetwork = (networkId, channelId) => {
-  return {
-    type: ADD_CHANNEL_TO_NETWORK,
-    networkId,
-    channelId
+    ...createNetwork(name, channels)
   }
 }
 
