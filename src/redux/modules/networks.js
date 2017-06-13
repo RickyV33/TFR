@@ -2,7 +2,6 @@ import { createSelector, createStructuredSelector } from 'reselect'
 
 const ADD_NETWORK = 'TelevisionForReddit/networks/ADD_NETWORK'
 const ADD_CHANNEL_TO_NETWORK = 'TelevisionForReddit/networks/ADD_CHANNEL_TO_NETWORK'
-const UPDATE_CURRENT_NETWORK = 'TelevisionForReddit/networks/UPDATE_CURRENT_NETWORK'
 
 let id = 0
 const initialState = {
@@ -46,12 +45,6 @@ export default function reducer (state = initialState, action) {
         }
       }
 
-    case UPDATE_CURRENT_NETWORK:
-      return {
-        ...state,
-        currentNetworkId: action.payload.networkId
-      }
-
     default:
       return state
   }
@@ -81,20 +74,13 @@ const addChannelToNetwork = (networkId, channelId) => {
   }
 }
 
-const updateCurrentNetwork = networkId => {
-  return {
-    type: UPDATE_CURRENT_NETWORK,
-    networkId
-  }
-}
-
 /**
  * Selectors
  */
 
-const currentNetworkId = state => state.entities.networks.currentNetworkId
-const networks = state => state.entities.networks.byId
-
-export const selectCurrentNetwork = createSelector(
-  [currentNetworkId, networks],
-  (currentNetworkId, networks) => networks[currentNetworkId])
+// const currentNetworkId = state => state.entities.networks.currentNetworkId
+// const networks = state => state.entities.networks.byId
+//
+// export const selectCurrentNetwork = createSelector(
+//   [currentNetworkId, networks],
+//   (currentNetworkId, networks) => networks[currentNetworkId])

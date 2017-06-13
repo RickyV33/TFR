@@ -1,4 +1,6 @@
 import { createSelector } from 'reselect'
+import shortid from 'shortid'
+import { combineReducers } from 'redux'
 
 import { channelNames } from './channelNames.js'
 
@@ -7,6 +9,7 @@ const GET_NEXT_VIDEO = 'TelevisionForReddit/channels/GET_NEXT_VIDEO'
 const ADD_VIDEOS_TO_NEXT = 'TelevisionForReddit/channels/ADD_VIDEOS_TO_NEXT'
 const UPDATE_AFTER = 'TelevisionForReddit/channels/UPDATE_AFTER'
 
+// Helper Functions
 function createChannel (id, nameId) {
   const templateChannel = {
     nameId: 0,
@@ -23,7 +26,7 @@ function createChannel (id, nameId) {
   }
 }
 
-function createChannels (channelNames, count) {
+function createChannels (channelNames) {
   let id
   const initialState = {
     byId: {},
@@ -31,7 +34,7 @@ function createChannels (channelNames, count) {
   }
 
   return channelNames.allIds.reduce((accum, nameId) => {
-    id = count++
+    id = shortid.generate()
     accum.byId[id] = createChannel(id, nameId)
     accum.allIds.push(id)
     return accum
@@ -56,11 +59,11 @@ function shiftVideos (source, current, destination) {
   return video
 }
 
-function addToById (state, id, payload) {
+function addToById (state, payload) {
   return {
-    ...state.byId,
-    [id]: {
-      ...state.byId[id],
+    ...state,
+    [payload.id]: {
+      ...state[payload.id],
       ...payload
     }
   }
@@ -70,16 +73,17 @@ function addToAllIds (state, id) {
   return [...state.allIds, id]
 }
 
-export default function reducer (state = createChannels(channelNames, 0), action) {
-  const currentChannel = state.byId[action.id]
-  let previous, current, next
+const initialState = createChannels(channelNames)
+
+// byId Slice Reducer
+function channelsById (state = initialState.byId, action) {
+  const currentChannel = state[action.id]
+  let previous, current, next, shiftedVideos, payload
   if (currentChannel) {
     previous = currentChannel.previous
     current = currentChannel.current
     next = currentChannel.next
   }
-  let shiftedVideos
-  let payload
 
   switch (action.type) {
     case GET_PREVIOUS_VIDEO:
@@ -89,11 +93,7 @@ export default function reducer (state = createChannels(channelNames, 0), action
         current: shiftedVideos.current,
         previous: shiftedVideos.previous
       }
-      return {
-        ...state,
-        byId: addToById(state, action.id, payload)
-      }
-
+      return addToById(state, payload)
     case GET_NEXT_VIDEO:
       shiftedVideos = shiftVideos(next, current, previous)
       payload = {
@@ -101,34 +101,35 @@ export default function reducer (state = createChannels(channelNames, 0), action
         current: shiftedVideos.current,
         previous: shiftedVideos.destination
       }
-      return {
-        ...state,
-        byId: addToById(state, action.id, payload)
-      }
+      return addToById(state, payload)
 
     case ADD_VIDEOS_TO_NEXT:
       payload = {
-        next: [...currentChannel.next, ...action.videos]
-      }
-      return {
-        ...state,
-        byId: addToById(state, action.id, payload),
-        allIds: addToAllIds(state, action.id)
-      }
-
-    case UPDATE_AFTER:
-      payload = {
+        next: [...currentChannel.next, ...action.videos],
         after: action.after
       }
-      return {
-        ...state,
-        byId: addToById(state, action.id, payload)
-      }
+      return addToById(state, payload)
 
     default:
       return state
   }
 }
+
+// allIds Slice Reducer
+function allChannels (state = initialState.allIds, action) {
+  switch (action.type) {
+    case ADD_VIDEOS_TO_NEXT:
+      return addToAllIds(state, action.id)
+
+    default:
+      return state
+  }
+}
+
+export default combineReducers({
+  byId: channelsById,
+  allIds: allChannels
+})
 
 /**
  * Action Creators
@@ -138,9 +139,7 @@ export const getPreviousVideo = id => ({ type: GET_PREVIOUS_VIDEO, id })
 
 export const getNextVideo = id => ({ type: GET_NEXT_VIDEO, id })
 
-export const addNextVideos = (id, videos) => ({ type: ADD_VIDEOS_TO_NEXT, videos, id })
-
-export const updateAfter = (id, after) => ({ type: UPDATE_AFTER, id, after })
+export const addVideosToNext = (id, videos) => ({ type: ADD_VIDEOS_TO_NEXT, id, videos, after })
 
 /**
  * Selectors

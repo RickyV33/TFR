@@ -1,5 +1,5 @@
 import { request } from '../reddit'
-import { addNextVideos, updateAfter } from './channels'
+import { addVideosToNext } from './channels'
 import { FETCHED, FETCHING } from '../constants'
 
 const ADD_VIDEOS_BY_ID = 'TelevisionForReddit/videos/ADD_VIDEOS_BY_ID'
@@ -54,16 +54,16 @@ const fetchedVideos = () => ({ type: FETCHED_VIDEOS })
  */
 
 export function getVideos (network, channel, after) {
-  return (dispatch, getState) => {
-    dispatch(fetchingVideos())
-    const accessToken = getState().authorization.accessToken
-    return request(network, channel, accessToken, after).then(videos => {
-      dispatch(addVideosById(videos.mappedToId))
-      dispatch(addNextVideos(videos.sortedById))
-      dispatch(updateAfter(videos.after))
-      return dispatch(fetchedVideos())
-    }).catch(error => {
-      console.error('getHotVideos -> ', error)
-    })
-  }
+  // return (dispatch, getState) => {
+  //   dispatch(fetchingVideos())
+  //   const accessToken = getState().authorization.accessToken
+  //   return request(network, channel, accessToken, after).then(videos => {
+  //     dispatch(addVideosById(videos.mappedToId))
+  //     dispatch(addVideosToNext(videos.sortedById, videos.after))
+  //     dispatch(updateAfter(videos.after))
+  //     return dispatch(fetchedVideos())
+  //   }).catch(error => {
+  //     console.error('getHotVideos -> ', error)
+  //   })
+  // }
 }
