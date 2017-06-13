@@ -1,11 +1,15 @@
 import { createSelector } from 'reselect'
 
+import { initialState as channelsInitialState } from './channels'
+import { initialState as networksInitialState } from './networks'
+
 const SET_CURRENT_NETWORK_ID = 'TelevisionForReddit/user/SET_CURRENT_NETWORK_ID'
 const SET_CURRENT_CHANNEL_ID = 'TelevisionForReddit/user/SET_CURRENT_CHANNEL_ID'
 
+// Initial state points to netowrk videos and netowrk hot
 const initialState = {
-  currentNetworkId: 0,
-  currentChannelId: 0
+  currentNetworkId: networksInitialState.id,
+  currentChannelId: channelsInitialState.allIds[0]
 }
 
 export default function reducer (state = initialState, action) {

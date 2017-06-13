@@ -5,7 +5,6 @@ import { combineReducers } from 'redux'
 import { addToById, addToAllIds } from './entityHelper'
 
 const ADD_NETWORK = 'TelevisionForReddit/networks/ADD_NETWORK'
-const ADD_CHANNEL_TO_NETWORK = 'TelevisionForReddit/networks/ADD_CHANNEL_TO_NETWORK'
 
 function createNetwork (name, channels) {
   const id = shortid.generate()
@@ -16,7 +15,7 @@ function createNetwork (name, channels) {
   }
 }
 
-const initialState = createNetwork('videos')
+export const initialState = createNetwork('videos')
 
 function networksById (state = initialState, action) {
   switch (action.type) {

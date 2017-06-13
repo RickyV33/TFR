@@ -60,7 +60,7 @@ function shiftVideos (source, current, destination) {
   return video
 }
 
-const initialState = createChannels(channelNames)
+export const initialState = createChannels(channelNames)
 
 // byId Slice Reducer
 function channelsById (state = initialState.byId, action) {
