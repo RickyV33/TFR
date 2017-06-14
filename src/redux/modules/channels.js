@@ -57,7 +57,7 @@ function shiftVideos (source, current, destination) {
       destination
     }
   }
-  return video
+  return videos
 }
 
 export const initialState = createChannels(channelNames)
@@ -78,23 +78,26 @@ function channelsById (state = initialState.byId, action) {
       payload = {
         next: shiftedVideos.destination,
         current: shiftedVideos.current,
-        previous: shiftedVideos.previous
+        previous: shiftedVideos.source,
+        id: action.id
       }
       return addToById(state, payload)
 
     case GET_NEXT_VIDEO:
       shiftedVideos = shiftVideos(next, current, previous)
       payload = {
-        next: shiftedVideos.previous,
+        next: shiftedVideos.source,
         current: shiftedVideos.current,
-        previous: shiftedVideos.destination
+        previous: shiftedVideos.destination,
+        id: action.id
       }
       return addToById(state, payload)
 
     case ADD_VIDEOS_TO_NEXT:
       payload = {
         next: [...currentChannel.next, ...action.videos],
-        after: action.after
+        after: action.after,
+        id: action.id
       }
       return addToById(state, payload)
 
@@ -127,16 +130,22 @@ export const getPreviousVideo = id => ({ type: GET_PREVIOUS_VIDEO, id })
 
 export const getNextVideo = id => ({ type: GET_NEXT_VIDEO, id })
 
-export const addVideosToNext = (id, videos) => ({ type: ADD_VIDEOS_TO_NEXT, id, videos, after })
+export const addVideosToNext = (id, videos, after) => ({ type: ADD_VIDEOS_TO_NEXT, id, videos, after })
 
 /**
  * Selectors
  */
 
-const currentChannelId = state => state.user.currentChannelId
-const channels = state => state.entities.channels.byId
+const channelNamesSelector = state => state.entities.channelNames.byId
+const currentChannelIdSelector = state => state.user.currentChannelId
+const channelsSelector = state => state.entities.channels.byId
 
 export const selectCurrentChannel = createSelector(
-  [currentChannelId, channels],
+  [currentChannelIdSelector, channelsSelector],
   (currentChannelId, channels) => channels[currentChannelId]
+)
+
+export const selectCurrentChannelName = createSelector(
+  [selectCurrentChannel, channelNamesSelector],
+  (currentChannel, channelNames) => channelNames[currentChannel.nameId]
 )

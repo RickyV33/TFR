@@ -2,47 +2,47 @@ export const channelNames = {
   byId: {
     0: {
       name: 'Hot',
-      url: 'hot',
+      urlPath: 'hot',
       id: 0
     },
     1: {
       name: 'New',
-      url: 'new',
+      urlPath: 'new',
       id: 1
     },
     2: {
       name: 'Rising',
-      url: 'rising',
+      urlPath: 'rising',
       id: 2
     },
     3: {
       name: 'Top of the Hour',
-      url: 'top/?sort=top&t=hour',
+      urlPath: 'top/?sort=top&t=hour',
       id: 3
     },
     4: {
       name: 'Top of the Day',
-      url: 'top/?sort=top&t=day',
+      urlPath: 'top/?sort=top&t=day',
       id: 4
     },
     5: {
       name: 'Top of the Week',
-      url: 'top/?sort=top&t=week',
+      urlPath: 'top/?sort=top&t=week',
       id: 5
     },
     6: {
       name: 'Top of the Month',
-      url: 'top/?sort=top&t=month',
+      urlPath: 'top/?sort=top&t=month',
       id: 6
     },
     7: {
       name: 'Top of the Year',
-      url: 'top/?sort=top&t=year',
+      urlPath: 'top/?sort=top&t=year',
       id: 7
     },
     8: {
       name: 'Top of All Time',
-      url: 'top/?sort=top&t=all',
+      urlPath: 'top/?sort=top&t=all',
       id: 8
     }
   },

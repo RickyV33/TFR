@@ -1,7 +1,8 @@
+import { createSelector } from 'reselect'
 import { combineReducers } from 'redux'
 
 import { request } from '../reddit'
-import { addVideosToNext } from './channels'
+import { addVideosToNext, selectCurrentChannel } from './channels'
 import { FETCHED, FETCHING } from './entityHelper'
 import { addToById, addToAllIds } from './entityHelper'
 
@@ -65,17 +66,25 @@ const fetchedVideos = () => ({ type: FETCHED_VIDEOS })
  * Thunks
  */
 
-export function getVideos (network, channel, after) {
+export function getVideos (network, channelUrlPath, channelId, after) {
   return (dispatch, getState) => {
-    // dispatch(fetchingVideos())
+    dispatch(fetchingVideos())
     const accessToken = getState().authorization.accessToken
-    return request(network, channel, accessToken, after).then(videos => {
+    return request(network, channelUrlPath, accessToken, after).then(videos => {
       dispatch(addVideosById(videos.mappedToId, videos.sortedById))
-      // dispatch(addVideosToNext(videos.sortedById, videos.after))
-      // dispatch(updateAfter(videos.after))
-      // return dispatch(fetchedVideos())
+      dispatch(addVideosToNext(channelId, videos.sortedById, videos.after))
     }).catch(error => {
       console.error('getHotVideos -> ', error)
     })
   }
 }
+
+/**
+ * Thunks
+ */
+const videosSelector = state => state.entities.videos.byId
+
+export const selectCurrentVideo = createSelector(
+  [selectCurrentChannel, videosSelector],
+  (currentChannel, videos) => videos[currentChannel.current]
+)

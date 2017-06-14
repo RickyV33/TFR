@@ -12,5 +12,5 @@ export function addToById (state, payload) {
 }
 
 export function addToAllIds (state, id) {
-  return [...state.allIds, id]
+  return [...state, id]
 }
