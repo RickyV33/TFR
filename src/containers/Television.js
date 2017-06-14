@@ -7,7 +7,8 @@ import { getAccessToken } from '../redux/modules/authorization'
 import { selectCurrentChannel, selectCurrentChannelName,
    getNextVideo, getPreviousVideo } from '../redux/modules/channels'
 import { selectCurrentNetwork } from '../redux/modules/networks'
-import { getVideos, selectCurrentVideo } from '../redux/modules/videos'
+import { getVideos, selectCurrentVideo, selectPreviousVideo,
+  selectNextVideo } from '../redux/modules/videos'
 import YouTube from '../components/YouTube'
 import '../style/style.css'
 
@@ -52,6 +53,8 @@ export class Television extends Component {
         <div>
           <h1>{this.props.currentNetwork.name}</h1>
           <h1>{this.props.currentChannelName.name}</h1>
+          <h1>{this.props.nextVideo.title}</h1>
+          <h1>{this.props.currentVideo.title}</h1>
           <input type='button' onClick={() => this.props.getPreviousVideo(channelId)} value='prev' />
           <YouTube videoId={videoId} opts={opts} />
           <input type='button' onClick={() => this.props.getNextVideo(channelId)} value='next' />
@@ -67,7 +70,9 @@ const mapStateToProps = state => {
     currentChannel: selectCurrentChannel(state),
     currentChannelName: selectCurrentChannelName(state),
     currentNetwork: selectCurrentNetwork(state),
-    currentVideo: selectCurrentVideo(state)
+    currentVideo: selectCurrentVideo(state),
+    prevousVideo: selectPreviousVideo(state),
+    nextVideo: selectNextVideo(state)
   }
 }
 

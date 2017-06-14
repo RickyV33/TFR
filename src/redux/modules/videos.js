@@ -88,3 +88,13 @@ export const selectCurrentVideo = createSelector(
   [selectCurrentChannel, videosSelector],
   (currentChannel, videos) => videos[currentChannel.current]
 )
+
+export const selectPreviousVideo = createSelector(
+  [selectCurrentChannel, videosSelector],
+  (currentChannel, videos) => videos[currentChannel.previous.slice(-1)[0]]
+)
+
+export const selectNextVideo = createSelector(
+  [selectCurrentChannel, videosSelector],
+  (currentChannel, videos) => videos[currentChannel.next.slice(-1)[0]]
+)
