@@ -16,15 +16,11 @@ export class Television extends Component {
   }
 
   componentWillMount () {
-    // this.props.getAccessToken().then(() => {
-    //   const { getVideos, currentChannel, currentNetwork } = this.props
-    //   const currentChannelAfter = currentChannel.after
-    //   const currentChannelName = currentChannel.name
-    //   const currentNetworkName = currentNetwork.name
-    //   return getVideos(currentNetworkName, currentChannelName, currentChannelAfter)
-    // }).then(() => {
-    //   // this.props.getNextVideo()
-    // })
+    this.props.getAccessToken().then(() => {
+      return this.props.getVideos('videos', 'hot')
+    }).then(() => {
+      // this.props.getNextVideo()
+    })
   }
 
   render () {
