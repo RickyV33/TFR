@@ -133,9 +133,10 @@ export const addVideosToNext = (id, videos) => ({ type: ADD_VIDEOS_TO_NEXT, id, 
  * Selectors
  */
 
-// const currentChannelId = state => state.entities.channels.currentChannelId
-// const channels = state => state.entities.channels
-//
-// export const selectCurrentChannel = createSelector(
-//   [currentChannelId, channels],
-//   (currentChannelId, channels) => channels[currentChannelId])
+const currentChannelId = state => state.user.currentChannelId
+const channels = state => state.entities.channels.byId
+
+export const selectCurrentChannel = createSelector(
+  [currentChannelId, channels],
+  (currentChannelId, channels) => channels[currentChannelId]
+)

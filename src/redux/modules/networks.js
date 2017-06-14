@@ -3,6 +3,7 @@ import shortid from 'shortid'
 import { combineReducers } from 'redux'
 
 import { addToById, addToAllIds } from './entityHelper'
+import { initialState as channelsInitialState } from './channels'
 
 const ADD_NETWORK = 'TelevisionForReddit/networks/ADD_NETWORK'
 
@@ -11,13 +12,13 @@ function createNetwork (name, channels) {
   return {
     id,
     name,
-    channels: channels || []
+    channels: channels
   }
 }
 
-export const initialState = createNetwork('videos')
+export const initialState = createNetwork('videos', channelsInitialState.allIds)
 
-function networksById (state = initialState, action) {
+function networksById (state = { [initialState.id]: initialState }, action) {
   switch (action.type) {
     case ADD_NETWORK:
       const { name, id, channels } = action
@@ -63,9 +64,10 @@ const addNetwork = (name, channels) => {
  * Selectors
  */
 
-// const currentNetworkId = state => state.entities.networks.currentNetworkId
-// const networks = state => state.entities.networks.byId
-//
-// export const selectCurrentNetwork = createSelector(
-//   [currentNetworkId, networks],
-//   (currentNetworkId, networks) => networks[currentNetworkId])
+const currentNetworkId = state => state.user.currentNetworkId
+const networks = state => state.entities.networks.byId
+
+export const selectCurrentNetwork = createSelector(
+  [currentNetworkId, networks],
+  (currentNetworkId, networks) => networks[currentNetworkId]
+)
