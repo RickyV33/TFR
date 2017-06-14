@@ -3,10 +3,8 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 
-import configureStore from './redux/configureStore'
+import store from './redux/configureStore'
 import Television from './containers/Television'
-
-const store = configureStore()
 
 ReactDOM.render(
   <Provider store={store}>

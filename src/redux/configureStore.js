@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux'
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import thunk from 'redux-thunk'
 
@@ -9,7 +9,7 @@ import channels from './modules/channels'
 import user from './modules/user'
 import channelNames from './modules/channelNames'
 
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore)
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const entities = combineReducers({
   videos,
   networks,
@@ -23,5 +23,8 @@ const reducer = combineReducers({
   entities
 })
 
-const configureStore = (initialState) => createStoreWithMiddleware(reducer, initialState)
-export default configureStore
+const store = createStore(reducer, /* preloadedState, */ composeEnhancers(
+  applyMiddleware(thunk)
+))
+
+export default store
