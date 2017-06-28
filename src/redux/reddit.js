@@ -13,7 +13,7 @@ export const request = (network, channel, accessToken, after = null) => {
     headers: {
       Authorization: `Bearer ${accessToken}`
     },
-    param: {
+    params: {
       after
     }
   }
