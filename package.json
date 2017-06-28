@@ -10,7 +10,7 @@
     "build": "npm run clean && npm run build:client & npm run build:server",
     "build:client": "cross-env NODE_ENV=production webpack --config ./webpack.config.prod.js --progress --profile --colors",
     "build:server": "cross-env NODE_ENV=production webpack --config ./webpack.config.server.js --progress --profile --colors",
-    "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
+    "test": "cross-env NODE_ENV=test mocha --compilers js:babel-core/register --require ./tests/testHelper.js --recursive ./tests",
     "test:watch": "npm run test -- --watch"
   },
   "devDependencies": {
@@ -36,6 +36,7 @@
     "dotenv": "^4.0.0",
     "express": "^4.14.1",
     "get-youtube-id": "^1.0.0",
+    "jsdom": "^11.0.0",
     "lodash": "^4.17.4",
     "mocha": "^3.4.2",
     "morgan": "^1.8.0",

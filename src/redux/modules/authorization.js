@@ -1,7 +1,7 @@
 import { authorize } from '../reddit'
 import { FETCHED, FETCHING } from './entityHelper'
 
-const GET_ACCESS_TOKEN = 'TelevisionForReddit/authorization/GET_ACCESS_TOKEN'
+const SET_ACCESS_TOKEN = 'TelevisionForReddit/authorization/SET_ACCESS_TOKEN'
 const FETCHING_ACCESS_TOKEN = 'TelevisionForReddit/authorization/FETCHING_ACCESS_TOKEN'
 const FETCHED_ACCESS_TOKEN = 'TelevisionForReddit/authorization/FETCHED_ACCESS_TOKEN'
 
@@ -12,7 +12,7 @@ const initialState = {
 
 export default function reducer (state = initialState, { type, accessToken }) {
   switch (type) {
-    case GET_ACCESS_TOKEN:
+    case SET_ACCESS_TOKEN:
       return {
         ...state,
         accessToken,
@@ -40,7 +40,7 @@ export default function reducer (state = initialState, { type, accessToken }) {
  * Action Creators
  */
 
-const setAccessToken = accessToken => ({ type: GET_ACCESS_TOKEN, accessToken })
+const setAccessToken = accessToken => ({ type: SET_ACCESS_TOKEN, accessToken })
 
 const fetchingAccessToken = () => ({ type: FETCHING_ACCESS_TOKEN })
 
