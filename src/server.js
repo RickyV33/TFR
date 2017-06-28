@@ -10,7 +10,6 @@ import config from '../webpack.config.js'
 
 const app = express()
 app.use(morgan('dev'))
-// app.use('/api', reddit)
 
 if (process.env.NODE_ENV === 'development') {
   const compiler = webpack(config)
@@ -40,7 +39,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const port = process.env.PORT || 3000
-// const env = process.env.NODE_ENV
 app.listen(port, err => {
   if (err) {
     return console.error(err)
