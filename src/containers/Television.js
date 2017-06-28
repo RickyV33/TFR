@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import ReactPlayer from 'react-player'
+import Paper from 'material-ui/Paper'
 
 import { getAccessToken } from '../redux/modules/authorization'
 import { selectCurrentChannel, selectCurrentChannelName,
@@ -15,32 +16,23 @@ export class Television extends Component {
   constructor (props) {
     super(props)
 
-    this.getNextVideoClickHandler = this.getNextVideoClickHandler.bind(this)
+    this.handleGetNextVideoClick = this.handleGetNextVideoClick.bind(this)
     this.getPreviousVideoClickHandler = this.getPreviousVideoClickHandler.bind(this)
-    this.getVideos = this.getVideos.bind(this)
   }
 
   componentWillMount () {
     this.props.getAccessToken()
-      .then(() => this.getVideos())
+      .then(this.props.getVideos)
       .then(() => this.props.getNextVideo(this.props.currentChannel.id))
   }
 
-  getNextVideoClickHandler () {
+  handleGetNextVideoClick () {
     this.props.getNextVideo(this.props.currentChannel.id)
-    this.getVideos()
+    this.props.getVideos()
   }
 
   getPreviousVideoClickHandler () {
     this.props.getPreviousVideo(this.props.currentChannel.id)
-  }
-
-  getVideos () {
-    const networkName = this.props.currentNetwork.name
-    const channelUrlPath = this.props.currentChannelName.urlPath
-    const channelId = this.props.currentChannel.id
-    const after = this.props.currentChannel.after
-    return this.props.getVideos(networkName, channelUrlPath, channelId, after)
   }
 
   render () {
@@ -58,15 +50,14 @@ export class Television extends Component {
     if (this.props.currentVideo) {
       const channelId = this.props.currentChannel.id
       return (
-        <div>
-          <h1>{this.props.currentNetwork.name}</h1>
-          <h1>{this.props.currentChannelName.name}</h1>
-          <h1>{this.props.nextVideo.title}</h1>
-          <h1>{this.props.currentVideo.title}</h1>
+        <Paper zDepth={2} >
+          <h1>{this.props.currentNetwork.name} - {this.props.currentChannelName.name}</h1>
+          <h1>next: {this.props.nextVideo.title}</h1>
+          <h1>current {this.props.currentVideo.title}</h1>
           <input type='button' onClick={this.getPreviousVideoClickHandler} value='prev' />
           <ReactPlayer url={this.props.currentVideo.url} opts={opts} />
-          <input type='button' onClick={this.getNextVideoClickHandler} value='next' />
-        </div>
+          <input type='button' onClick={this.handleGetNextVideoClick} value='next' />
+        </Paper>
       )
     }
     return <div>LOADING</div>

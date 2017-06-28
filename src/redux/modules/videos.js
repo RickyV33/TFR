@@ -2,9 +2,11 @@ import { createSelector } from 'reselect'
 import { combineReducers } from 'redux'
 
 import { request } from '../reddit'
-import { addVideosToNext, selectCurrentChannel } from './channels'
 import { FETCHED, FETCHING } from './entityHelper'
 import { addToById, addToAllIds } from './entityHelper'
+import { selectCurrentChannel, selectCurrentChannelName, addVideosToNext,
+   getNextVideo, getPreviousVideo } from './channels'
+import { selectCurrentNetwork } from './networks'
 
 const ADD_VIDEOS_BY_ID = 'TelevisionForReddit/videos/ADD_VIDEOS_BY_ID'
 const FETCHING_VIDEOS = 'TelevisionForReddit/videos/FETCHING_VIDEOS'
@@ -66,13 +68,19 @@ const fetchedVideos = () => ({ type: FETCHED_VIDEOS })
  * Thunks
  */
 
-export function getVideos (network, channelUrlPath, channelId, after) {
+export function getVideos () {
   return (dispatch, getState) => {
     dispatch(fetchingVideos())
-    const accessToken = getState().authorization.accessToken
-    return request(network, channelUrlPath, accessToken, after).then(videos => {
+    const state = getState()
+    const currentNetwork = selectCurrentNetwork(state).name
+    const channelUrlPath = selectCurrentChannelName(state).urlPath
+    const accessToken = state.authorization.accessToken
+    const after = selectCurrentChannel(state).after
+    const currentChannelId = state.user.currentChannelId
+    console.log(currentNetwork, channelUrlPath, accessToken, after)
+    return request(currentNetwork, channelUrlPath, accessToken, after).then(videos => {
       dispatch(addVideosById(videos.mappedToId, videos.sortedById))
-      dispatch(addVideosToNext(channelId, videos.sortedById, videos.after))
+      dispatch(addVideosToNext(currentChannelId, videos.sortedById, videos.after))
     }).catch(error => {
       console.error('getHotVideos -> ', error)
     })
@@ -96,5 +104,5 @@ export const selectPreviousVideo = createSelector(
 
 export const selectNextVideo = createSelector(
   [selectCurrentChannel, videosSelector],
-  (currentChannel, videos) => videos[currentChannel.next.slice(-1)[0]]
+  (currentChannel, videos) => videos[currentChannel.next[0]]
 )
