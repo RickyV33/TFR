@@ -19,7 +19,7 @@ export default function reducer (state = initialState, action) {
         currentNetworkId: action.id
       }
 
-    case SET_CURRENT_NETWORK_ID:
+    case SET_CURRENT_CHANNEL_ID:
       return {
         ...state,
         currentChannelId: action.id
