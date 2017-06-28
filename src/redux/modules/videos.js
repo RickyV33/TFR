@@ -77,7 +77,6 @@ export function getVideos () {
     const accessToken = state.authorization.accessToken
     const after = selectCurrentChannel(state).after
     const currentChannelId = state.user.currentChannelId
-    console.log(currentNetwork, channelUrlPath, accessToken, after)
     return request(currentNetwork, channelUrlPath, accessToken, after).then(videos => {
       dispatch(addVideosById(videos.mappedToId, videos.sortedById))
       dispatch(addVideosToNext(currentChannelId, videos.sortedById, videos.after))

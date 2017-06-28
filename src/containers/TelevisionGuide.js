@@ -15,21 +15,26 @@ export class TelevisionGuide extends Component {
   constructor (props) {
     super(props)
 
-    this.generateNetworkMenuItems = this.generateNetworkMenuItems.bind(this)
-    this.generateChannelMenuItems = this.generateChannelMenuItems.bind(this)
+    this.networkMenuItems = this.networkMenuItems.bind(this)
+    this.channelMenuItems = this.channelMenuItems.bind(this)
     this.handleChannelTouchTap = this.handleChannelTouchTap.bind(this)
+  }
+
+  componentDidUpdate (prevProps) {
+    const isSameChannel = this.props.currentChannelId === prevProps.currentChannelId
+    if (!isSameChannel && !this.props.currentVideo) {
+      this.props.getVideos()
+        .then(() => this.props.getNextVideo(this.props.currentChannelId))
+    }
   }
 
   handleChannelTouchTap (networkId, channelId) {
     const isSameChannel = this.props.currentChannelId === channelId
     this.props.setCurrentChannelId(channelId)
     this.props.setCurrentNetworkId(networkId)
-    if (!isSameChannel && !this.props.currentVideo) {
-      this.props.getVideos().then(() => this.props.getNextVideo(channelId))
-    }
   }
 
-  generateChannelMenuItems (networkId, ids) {
+  channelMenuItems (networkId, ids) {
     return ids.map(id => {
       return <MenuItem
         key={id}
@@ -39,12 +44,12 @@ export class TelevisionGuide extends Component {
     })
   }
 
-  generateNetworkMenuItems () {
+  networkMenuItems () {
     return this.props.allNetworks.map(network => {
       return <MenuItem
         key={network.id}
         primaryText={network.name}
-        menuItems={this.generateChannelMenuItems(network.id, network.channels)}
+        menuItems={this.channelMenuItems(network.id, network.channels)}
         rightIcon={<ArrowDropRight />}
         checked={this.props.currentNetworkId === network.id} />
     })
@@ -54,7 +59,7 @@ export class TelevisionGuide extends Component {
     return (
       <div>
         <Menu >
-          {this.generateNetworkMenuItems()}
+          {this.networkMenuItems()}
         </Menu>
       </div>
     )
@@ -62,7 +67,6 @@ export class TelevisionGuide extends Component {
 }
 
 const mapStateToProps = state => {
-  // console.log('selecting vid = ', selectCurrentVideo(state))
   return {
     allChannels: selectAllChannels(state),
     allNetworks: selectAllNetworks(state),
