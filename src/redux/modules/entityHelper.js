@@ -1,3 +1,5 @@
+import { uniq } from 'lodash'
+
 export const FETCHED = 'FETCHED'
 export const FETCHING = 'FETCHING'
 
@@ -12,5 +14,5 @@ export function addToById (state, payload) {
 }
 
 export function addToAllIds (state, id) {
-  return [...state, id]
+  return uniq([...state, id])
 }
