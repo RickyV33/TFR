@@ -64,10 +64,16 @@ const addNetwork = (name, channels) => {
  * Selectors
  */
 
-const currentNetworkId = state => state.user.currentNetworkId
-const networks = state => state.entities.networks.byId
+const currentNetworkIdSelector = state => state.user.currentNetworkId
+const networksSelector = state => state.entities.networks.byId
+const allNetworksSelector = state => state.entities.networks.allIds
 
 export const selectCurrentNetwork = createSelector(
-  [currentNetworkId, networks],
+  [currentNetworkIdSelector, networksSelector],
   (currentNetworkId, networks) => networks[currentNetworkId]
+)
+
+export const selectAllNetworks = createSelector(
+  [allNetworksSelector, networksSelector],
+  (allNetworks, networks) => allNetworks.map(id => networks[id])
 )
