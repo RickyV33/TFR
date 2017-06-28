@@ -53,7 +53,7 @@ export class Television extends Component {
         <Paper zDepth={2} >
           <h1>{this.props.currentNetwork.name} - {this.props.currentChannelName.name}</h1>
           <h1>next: {this.props.nextVideo.title}</h1>
-          <h1>current {this.props.currentVideo.title}</h1>
+          <h1>current: {this.props.currentVideo.title}</h1>
           <input type='button' onClick={this.getPreviousVideoClickHandler} value='prev' />
           <ReactPlayer url={this.props.currentVideo.url} opts={opts} />
           <input type='button' onClick={this.handleGetNextVideoClick} value='next' />

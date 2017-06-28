@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
 import shortid from 'shortid'
 import { combineReducers } from 'redux'
+import { uniq } from 'lodash'
 
 import { channelNames } from './channelNames.js'
 import { addToById, addToAllIds } from './entityHelper'
@@ -95,7 +96,7 @@ function channelsById (state = initialState.byId, action) {
 
     case ADD_VIDEOS_TO_NEXT:
       payload = {
-        next: [...currentChannel.next, ...action.videos],
+        next: uniq([...currentChannel.next, ...action.videos]),
         after: action.after,
         id: action.id
       }
@@ -139,13 +140,34 @@ export const addVideosToNext = (id, videos, after) => ({ type: ADD_VIDEOS_TO_NEX
 const channelNamesSelector = state => state.entities.channelNames.byId
 const currentChannelIdSelector = state => state.user.currentChannelId
 const channelsSelector = state => state.entities.channels.byId
+const allChannelsSelector = state => state.entities.channels.allIds
 
 export const selectCurrentChannel = createSelector(
   [currentChannelIdSelector, channelsSelector],
-  (currentChannelId, channels) => channels[currentChannelId]
+  (currentChannelId, channels) => {
+    return channels[currentChannelId]
+  }
 )
 
 export const selectCurrentChannelName = createSelector(
   [selectCurrentChannel, channelNamesSelector],
   (currentChannel, channelNames) => channelNames[currentChannel.nameId]
+)
+
+export const selectAllChannels = createSelector(
+  [allChannelsSelector, channelsSelector, channelNamesSelector],
+  (allChannels, channels, channelNames) => {
+    return allChannels
+      .map(id => channels[id])
+      .reduce((accum, channel) => {
+        const channelId = channel.id
+        return {
+          ...accum,
+          [channelId]: {
+            channelId,
+            name: channelNames[channel.nameId].name
+          }
+        }
+      }, {})
+  }
 )
