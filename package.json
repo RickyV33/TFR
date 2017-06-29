@@ -11,7 +11,8 @@
     "build:client": "cross-env NODE_ENV=production webpack --config ./webpack.config.prod.js --progress --profile --colors",
     "build:server": "cross-env NODE_ENV=production webpack --config ./webpack.config.server.js --progress --profile --colors",
     "test": "cross-env NODE_ENV=test mocha --compilers js:babel-core/register --require ./tests/testHelper.js --recursive ./tests",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "count": "cloc --exclude-dir=node_modules,.idea,.git --exclude-list-file=.env,.DS_STORE ."
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",
@@ -21,6 +22,7 @@
     "babel-preset-react": "^6.1.18",
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-1": "^6.1.18",
+    "cloc": "^2.2.0",
     "cross-env": "^3.1.4",
     "css-loader": "^0.26.1",
     "html-webpack-plugin": "^2.28.0",

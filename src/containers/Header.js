@@ -45,8 +45,8 @@ export default class Header extends Component {
                 <ToolbarTitle text="Television for Reddit" />
               </ToolbarGroup>
               <ToolbarGroup>
-                  Network
-                  Channel
+              </ToolbarGroup>
+              <ToolbarGroup>
               </ToolbarGroup>
               <ToolbarGroup lastChild={true}>
               </ToolbarGroup>
