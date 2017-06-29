@@ -16,8 +16,8 @@ export class Television extends Component {
   constructor (props) {
     super(props)
 
-    this.handleGetNextVideoClick = this.handleGetNextVideoClick.bind(this)
-    this.getPreviousVideoClickHandler = this.getPreviousVideoClickHandler.bind(this)
+    this.handleGetNextVideo = this.handleGetNextVideo.bind(this)
+    this.handleGetPreviousVideo = this.handleGetPreviousVideo.bind(this)
   }
 
   componentWillMount () {
@@ -26,12 +26,12 @@ export class Television extends Component {
       .then(() => this.props.getNextVideo(this.props.currentChannel.id))
   }
 
-  handleGetNextVideoClick () {
+  handleGetNextVideo () {
     this.props.getNextVideo(this.props.currentChannel.id)
     this.props.getVideos()
   }
 
-  getPreviousVideoClickHandler () {
+  handleGetPreviousVideo () {
     this.props.getPreviousVideo(this.props.currentChannel.id)
   }
 
@@ -41,10 +41,10 @@ export class Television extends Component {
       width: '1000',
       // https://developers.google.com/youtube/player_parameters
       playerVars: {
-        autoplay: 1,
         showinfo: 0,
         fs: 0,
-        rel: 0
+        rel: 0,
+        controls: 1
       }
     }
     if (this.props.currentVideo) {
@@ -54,9 +54,13 @@ export class Television extends Component {
           <h1>{this.props.currentNetwork.name} - {this.props.currentChannelName.name}</h1>
           <h1>next: {this.props.nextVideo.title}</h1>
           <h1>current: {this.props.currentVideo.title}</h1>
-          <input type='button' onClick={this.getPreviousVideoClickHandler} value='prev' />
-          <ReactPlayer url={this.props.currentVideo.url} />
-          <input type='button' onClick={this.handleGetNextVideoClick} value='next' />
+          <input type='button' onClick={this.handleGetPreviousVideo} value='prev' />
+          <ReactPlayer
+            url={this.props.currentVideo.url}
+            playing
+            onEnded={this.handleGetNextVideo}
+            youtubeConfig={opts} />
+          <input type='button' onClick={this.handleGetNextVideo} value='next' />
         </Paper>
       )
     }
