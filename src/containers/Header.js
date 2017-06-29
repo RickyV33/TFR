@@ -16,6 +16,8 @@ export default class Header extends Component {
     this.state = {
       openDrawer: false
     }
+    this.handleToggle = this.handleToggle.bind(this)
+    this.handleClose = this.handleClose.bind(this)
   }
 
   handleToggle () {
