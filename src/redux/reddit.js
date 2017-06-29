@@ -20,7 +20,7 @@ export const request = (network, channel, accessToken, after = null) => {
 
   return axios(url, options).then(response => {
     const data = response.data.data
-    const initialValue = { mappedToId: {}, sortedById: [], after: data.after}
+    const initialValue = { mappedToId: {}, sortedById: [], after: data.after }
     return data.children
       .map(entry => entry.data)
       .filter(video => video.domain.match(/^(youtube.com|youtu.be)$/))

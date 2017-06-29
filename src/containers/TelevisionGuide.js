@@ -9,7 +9,7 @@ import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right'
 import { selectAllChannels, getNextVideo } from '../redux/modules/channels'
 import { selectAllNetworks } from '../redux/modules/networks'
 import { setCurrentNetworkId, setCurrentChannelId } from '../redux/modules/user'
-import { getVideos, selectCurrentVideo, selectNextVideo } from '../redux/modules/videos'
+import { getVideos, selectCurrentVideo } from '../redux/modules/videos'
 
 export class TelevisionGuide extends Component {
   constructor (props) {
@@ -29,7 +29,6 @@ export class TelevisionGuide extends Component {
   }
 
   handleChannelTouchTap (networkId, channelId) {
-    const isSameChannel = this.props.currentChannelId === channelId
     this.props.setCurrentChannelId(channelId)
     this.props.setCurrentNetworkId(networkId)
   }

@@ -3,14 +3,11 @@ import { combineReducers } from 'redux'
 
 import { request } from '../reddit'
 import { FETCHED, FETCHING } from './entityHelper'
-import { addToById, addToAllIds } from './entityHelper'
-import { selectCurrentChannel, selectCurrentChannelName, addVideosToNext,
-   getNextVideo, getPreviousVideo } from './channels'
+import { selectCurrentChannel, selectCurrentChannelName, addVideosToNext } from './channels'
 import { selectCurrentNetwork } from './networks'
 
 const ADD_VIDEOS_BY_ID = 'TelevisionForReddit/videos/ADD_VIDEOS_BY_ID'
 const FETCHING_VIDEOS = 'TelevisionForReddit/videos/FETCHING_VIDEOS'
-const FETCHED_VIDEOS = 'TelevisionForReddit/videos/FETCHED_VIDEOS'
 
 function videosById (state = {}, action) {
   switch (action.type) {
@@ -61,8 +58,6 @@ export default combineReducers({
 const addVideosById = (videosById, allVideos) => ({ type: ADD_VIDEOS_BY_ID, videosById, allVideos })
 
 const fetchingVideos = () => ({ type: FETCHING_VIDEOS })
-
-const fetchedVideos = () => ({ type: FETCHED_VIDEOS })
 
 /**
  * Thunks

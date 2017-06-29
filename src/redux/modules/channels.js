@@ -9,7 +9,6 @@ import { addToById, addToAllIds } from './entityHelper'
 const GET_PREVIOUS_VIDEO = 'TelevisionForReddit/channels/GET_PREVIOUS_VIDEO'
 const GET_NEXT_VIDEO = 'TelevisionForReddit/channels/GET_NEXT_VIDEO'
 const ADD_VIDEOS_TO_NEXT = 'TelevisionForReddit/channels/ADD_VIDEOS_TO_NEXT'
-const UPDATE_AFTER = 'TelevisionForReddit/channels/UPDATE_AFTER'
 
 // Helper Functions
 function createChannel (id, nameId) {

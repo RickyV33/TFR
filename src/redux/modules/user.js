@@ -1,5 +1,3 @@
-import { createSelector } from 'reselect'
-
 import { initialState as networksInitialState } from './networks'
 
 const SET_CURRENT_NETWORK_ID = 'TelevisionForReddit/user/SET_CURRENT_NETWORK_ID'

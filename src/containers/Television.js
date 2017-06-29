@@ -48,7 +48,6 @@ export class Television extends Component {
       }
     }
     if (this.props.currentVideo) {
-      const channelId = this.props.currentChannel.id
       return (
         <Paper zDepth={2} >
           <h1>{this.props.currentNetwork.name} - {this.props.currentChannelName.name}</h1>

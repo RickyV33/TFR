@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'development') {
   })
 } else {
   app.get('*', (req, res) => {
-    app.use(express.static(__dirname + '../dist'))
+    app.use(express.static(path.join(__dirname, '../dist')))
     res.sendFile(path.join(__dirname, '../dist/index.html'))
   })
 }

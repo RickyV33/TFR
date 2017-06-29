@@ -2,12 +2,11 @@ import React, { Component } from 'react'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import AppBar from 'material-ui/AppBar'
-import Drawer from 'material-ui/Drawer';
-import MenuIcon from 'material-ui/svg-icons/navigation/menu';
-import IconButton from 'material-ui/IconButton';
-import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
-
+// import AppBar from 'material-ui/AppBar'
+import Drawer from 'material-ui/Drawer'
+import MenuIcon from 'material-ui/svg-icons/navigation/menu'
+import IconButton from 'material-ui/IconButton'
+import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar'
 
 import TelevisionGuide from './TelevisionGuide'
 
@@ -19,11 +18,11 @@ export default class Header extends Component {
     }
   }
 
-  handleToggle = () => {
+  handleToggle () {
     this.setState({ openDrawer: !this.state.openDrawer })
   }
 
-  handleClose = () => {
+  handleClose () {
     this.setState({ openDrawer: false })
   }
 
@@ -38,18 +37,15 @@ export default class Header extends Component {
         <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
           <div>
             <Toolbar style={{backgroundColor: '#00BCD4'}}>
-              <ToolbarGroup firstChild={true}>
+              <ToolbarGroup firstChild>
                 <IconButton onTouchTap={this.handleToggle}>
                   <MenuIcon />
                 </IconButton>
-                <ToolbarTitle text="Television for Reddit" />
+                <ToolbarTitle text='Television for Reddit' />
               </ToolbarGroup>
-              <ToolbarGroup>
-              </ToolbarGroup>
-              <ToolbarGroup>
-              </ToolbarGroup>
-              <ToolbarGroup lastChild={true}>
-              </ToolbarGroup>
+              <ToolbarGroup />
+              <ToolbarGroup />
+              <ToolbarGroup lastChild />
             </Toolbar>
             <Drawer
               docked={false}

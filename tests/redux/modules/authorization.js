@@ -1,5 +1,7 @@
+/* eslint-env mocha */
+
 import { expect } from 'chai'
-import { authorizationTest } from '../../../src/redux/modules/authorization'
+import authorization from '../../../src/redux/modules/authorization'
 
 describe('authorization module', () => {
   describe('reducer function', () => {

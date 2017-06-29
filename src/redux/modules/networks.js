@@ -1,4 +1,4 @@
-import { createSelector, createStructuredSelector } from 'reselect'
+import { createSelector } from 'reselect'
 import shortid from 'shortid'
 import { combineReducers } from 'redux'
 
@@ -53,12 +53,12 @@ export default combineReducers({
  * Action Creators
  */
 
-const addNetwork = (name, channels) => {
-  return {
-    type: ADD_NETWORK,
-    ...createNetwork(name, channels)
-  }
-}
+// const addNetwork = (name, channels) => {
+//   return {
+//     type: ADD_NETWORK,
+//     ...createNetwork(name, channels)
+//   }
+// }
 
 /**
  * Selectors
