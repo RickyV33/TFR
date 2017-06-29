@@ -16,7 +16,7 @@ function createNetwork (name, channels) {
   }
 }
 
-export const initialState = createNetwork('videos', channelsInitialState.allIds)
+export const initialState = createNetwork('Videos', channelsInitialState.allIds)
 
 function networksById (state = { [initialState.id]: initialState }, action) {
   switch (action.type) {
