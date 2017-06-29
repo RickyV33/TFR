@@ -4,6 +4,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import AppBar from 'material-ui/AppBar'
 import Drawer from 'material-ui/Drawer';
+import MenuIcon from 'material-ui/svg-icons/navigation/menu';
+import IconButton from 'material-ui/IconButton';
+import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
+
 
 import TelevisionGuide from './TelevisionGuide'
 
@@ -24,13 +28,29 @@ export default class Header extends Component {
   }
 
   render () {
+    /*
+    <AppBar
+                  title='Television for Reddit'
+                  onLeftIconButtonTouchTap={this.handleToggle} />
+     */
     return (
       <div>
         <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
           <div>
-            <AppBar
-              title='Television for Reddit'
-              onLeftIconButtonTouchTap={this.handleToggle} />
+            <Toolbar style={{backgroundColor: '#00BCD4'}}>
+              <ToolbarGroup firstChild={true}>
+                <IconButton onTouchTap={this.handleToggle}>
+                  <MenuIcon />
+                </IconButton>
+                <ToolbarTitle text="Television for Reddit" />
+              </ToolbarGroup>
+              <ToolbarGroup>
+                  Network
+                  Channel
+              </ToolbarGroup>
+              <ToolbarGroup lastChild={true}>
+              </ToolbarGroup>
+            </Toolbar>
             <Drawer
               docked={false}
               width={200}
