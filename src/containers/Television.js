@@ -55,7 +55,7 @@ export class Television extends Component {
           <h1>next: {this.props.nextVideo.title}</h1>
           <h1>current: {this.props.currentVideo.title}</h1>
           <input type='button' onClick={this.getPreviousVideoClickHandler} value='prev' />
-          <ReactPlayer url={this.props.currentVideo.url} opts={opts} />
+          <ReactPlayer url={this.props.currentVideo.url} />
           <input type='button' onClick={this.handleGetNextVideoClick} value='next' />
         </Paper>
       )
