@@ -16,23 +16,18 @@ export default class Header extends Component {
     this.state = {
       openDrawer: false
     }
-    this.handleToggle = this.handleToggle.bind(this)
-    this.handleClose = this.handleClose.bind(this)
+    this.handleMenuTouchTap = this.handleMenuTouchTap.bind(this)
   }
 
-  handleToggle () {
+  handleMenuTouchTap () {
     this.setState({ openDrawer: !this.state.openDrawer })
-  }
-
-  handleClose () {
-    this.setState({ openDrawer: false })
   }
 
   render () {
     /*
     <AppBar
                   title='Television for Reddit'
-                  onLeftIconButtonTouchTap={this.handleToggle} />
+                  onLeftIconButtonTouchTap={this.handleMenuTouchTap} />
      */
     return (
       <div>
@@ -40,7 +35,7 @@ export default class Header extends Component {
           <div>
             <Toolbar style={{backgroundColor: '#00BCD4'}}>
               <ToolbarGroup firstChild>
-                <IconButton onTouchTap={this.handleToggle}>
+                <IconButton onTouchTap={this.handleMenuTouchTap}>
                   <MenuIcon />
                 </IconButton>
                 <ToolbarTitle text='Television for Reddit' />
@@ -54,7 +49,7 @@ export default class Header extends Component {
               width={200}
               open={this.state.openDrawer}
               onRequestChange={openDrawer => this.setState({openDrawer})} >
-              <TelevisionGuide />
+              <TelevisionGuide closeMenu={this.handleMenuTouchTap} />
             </Drawer>
             {this.props.children}
           </div>

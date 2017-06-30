@@ -31,6 +31,7 @@ export class TelevisionGuide extends Component {
   handleChannelTouchTap (networkId, channelId) {
     this.props.setCurrentChannelId(channelId)
     this.props.setCurrentNetworkId(networkId)
+    this.props.closeMenu()
   }
 
   channelMenuItems (networkId, ids) {
