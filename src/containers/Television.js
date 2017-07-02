@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import ReactPlayer from 'react-player'
+import IconButton from 'material-ui/IconButton'
+import SkipNext from 'material-ui/svg-icons/av/skip-next'
+import SkipPrevious from 'material-ui/svg-icons/av/skip-previous'
 
 import { getAccessToken } from '../redux/modules/authorization'
 import { selectCurrentChannel, selectCurrentChannelName,
@@ -43,12 +46,19 @@ export class Television extends Component {
       }
     }
     if (this.props.currentVideo) {
+      const televisionContainerStyle = {
+        width: '100%',
+        height: '65vh',
+        border: '2px solid'
+      }
       return (
         <div>
           <h1>{this.props.currentNetwork.name} - {this.props.currentChannelName.name}</h1>
           <h1>{this.props.currentVideo.title}</h1>
-          <div style={{height: '75vh'}}>
-            <input style={{float: 'left', width: '5%'}} type='button' onClick={this.handleGetPreviousVideo} value='prev' />
+          <div style={televisionContainerStyle} >
+            <IconButton onTouchTap={this.handleGetPreviousVideo} >
+              <SkipPrevious />
+            </IconButton>
             <ReactPlayer
               url={this.props.currentVideo.url}
               onEnded={this.handleGetNextVideo}
@@ -57,7 +67,9 @@ export class Television extends Component {
               width='90%'
               style={{display: 'inline-block', width: 'calc(100% - 80px)'}}
               youtubeConfig={opts} />
-            <input style={{float: 'right', width: '5%'}} type='button' onClick={this.handleGetNextVideo} value='next' />
+            <IconButton onTouchTap={this.handleGetNextVideo} >
+              <SkipNext />
+            </IconButton>
           </div>
         </div>
       )
