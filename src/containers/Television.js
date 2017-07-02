@@ -5,6 +5,7 @@ import ReactPlayer from 'react-player'
 import IconButton from 'material-ui/IconButton'
 import SkipNext from 'material-ui/svg-icons/av/skip-next'
 import SkipPrevious from 'material-ui/svg-icons/av/skip-previous'
+import { indigo500 } from 'material-ui/styles/colors'
 
 import { getAccessToken } from '../redux/modules/authorization'
 import { selectCurrentChannel, selectCurrentChannelName,
@@ -47,14 +48,26 @@ export class Television extends Component {
     }
     if (this.props.currentVideo) {
       const televisionContainerStyle = {
-        width: '100%',
-        height: '65vh',
-        border: '2px solid'
+      //   height: 'calc(100% - 117px) !important',
+        border: '2px solid',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
       }
+
+      const videoTitleStyle = {
+        fontSize: '20px',
+        lineHeight: '28px',
+        fontWeight: '400',
+        color: indigo500
+      }
+
+      const reactPlayerStyle = {
+      }
+
       return (
         <div>
-          <h1>{this.props.currentNetwork.name} - {this.props.currentChannelName.name}</h1>
-          <h1>{this.props.currentVideo.title}</h1>
+          <h2 style={videoTitleStyle} >{this.props.currentVideo.title}</h2>
           <div style={televisionContainerStyle} >
             <IconButton onTouchTap={this.handleGetPreviousVideo} >
               <SkipPrevious />
@@ -62,10 +75,10 @@ export class Television extends Component {
             <ReactPlayer
               url={this.props.currentVideo.url}
               onEnded={this.handleGetNextVideo}
-              playing
+              onError={this.handleGetNextVideo}
               height='100%'
-              width='90%'
-              style={{display: 'inline-block', width: 'calc(100% - 80px)'}}
+              width='100%'
+              style={reactPlayerStyle}
               youtubeConfig={opts} />
             <IconButton onTouchTap={this.handleGetNextVideo} >
               <SkipNext />
