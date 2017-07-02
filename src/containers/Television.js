@@ -18,6 +18,10 @@ export class Television extends Component {
   constructor (props) {
     super(props)
 
+    this.state = {
+      hoverPreviousButton: false,
+      hoverNextButton: false
+    }
     this.handleGetNextVideo = this.handleGetNextVideo.bind(this)
     this.handleGetPreviousVideo = this.handleGetPreviousVideo.bind(this)
   }
@@ -54,7 +58,6 @@ export class Television extends Component {
         alignItems: 'center',
         overflow: 'auto'
       }
-
       const videoTitleStyle = {
         fontSize: '20px',
         lineHeight: '28px',
@@ -63,26 +66,41 @@ export class Television extends Component {
         marginLeft: '48px',
         marginRight: '48px'
       }
-
       const iconButtonStyle = {
         height: '100%'
       }
+      const grayStyle = {
+        backgroundColor: '#cccccc'
+      }
+      let onHoverPreviousStyle = this.state.hoverPreviousButton ? grayStyle : {}
+      let onHoverNextStyle = this.state.hoverNextButton ? grayStyle : {}
 
       return (
         <div>
           <h2 style={videoTitleStyle} >{this.props.currentVideo.title}</h2>
           <div style={televisionContainerStyle} >
-            <IconButton style={iconButtonStyle} onTouchTap={this.handleGetPreviousVideo} >
+            <IconButton
+              onMouseOver={() => this.setState({ hoverPreviousButton: true })}
+              onMouseLeave={() => this.setState({ hoverPreviousButton: false })}
+              style={{...iconButtonStyle, ...onHoverPreviousStyle}}
+              onTouchTap={this.handleGetPreviousVideo}
+              disableTouchRipple >
               <SkipPrevious />
             </IconButton>
             <ReactPlayer
               url={this.props.currentVideo.url}
               onEnded={this.handleGetNextVideo}
               onError={this.handleGetNextVideo}
+              playing
               height='100%'
               width='100%'
               youtubeConfig={opts} />
-            <IconButton style={iconButtonStyle} onTouchTap={this.handleGetNextVideo} >
+            <IconButton
+              onMouseOver={() => this.setState({ hoverNextButton: true })}
+              onMouseLeave={() => this.setState({ hoverNextButton: false })}
+              style={{...iconButtonStyle, ...onHoverNextStyle}}
+              onTouchTap={this.handleGetNextVideo}
+              disableTouchRipple >
               <SkipNext />
             </IconButton>
           </div>

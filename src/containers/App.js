@@ -8,14 +8,12 @@ import Header from '../components/Header'
 
 const App = () => {
   return (
-    <div>
-      <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
-        <div>
-          <Header />
-          <Television />
-        </div>
-      </MuiThemeProvider>
-    </div>
+    <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
+      <div>
+        <Header />
+        <Television />
+      </div>
+    </MuiThemeProvider>
   )
 }
 
