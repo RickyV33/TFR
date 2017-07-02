@@ -6,6 +6,7 @@ import IconButton from 'material-ui/IconButton'
 import SkipNext from 'material-ui/svg-icons/av/skip-next'
 import SkipPrevious from 'material-ui/svg-icons/av/skip-previous'
 import { indigo500 } from 'material-ui/styles/colors'
+import CircularProgress from 'material-ui/CircularProgress'
 
 import { getAccessToken } from '../redux/modules/authorization'
 import { selectCurrentChannel, selectCurrentChannelName,
@@ -50,31 +51,33 @@ export class Television extends Component {
         controls: 1
       }
     }
+    const televisionContainerStyle = {
+      height: 'calc(100vh - 135px)',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    }
+    const videoTitleStyle = {
+      fontSize: '20px',
+      lineHeight: '28px',
+      fontWeight: '400',
+      color: indigo500,
+      marginLeft: '48px',
+      marginRight: '48px'
+    }
+    const iconButtonStyle = {
+      height: '100%'
+    }
+    const grayStyle = {
+      backgroundColor: '#cccccc'
+    }
+    const loadingScreenStyle = {
+      ...televisionContainerStyle,
+      justifyContent: 'center'
+    }
     if (this.props.currentVideo) {
-      const televisionContainerStyle = {
-        height: 'calc(100vh - 135px)',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        overflow: 'auto'
-      }
-      const videoTitleStyle = {
-        fontSize: '20px',
-        lineHeight: '28px',
-        fontWeight: '400',
-        color: indigo500,
-        marginLeft: '48px',
-        marginRight: '48px'
-      }
-      const iconButtonStyle = {
-        height: '100%'
-      }
-      const grayStyle = {
-        backgroundColor: '#cccccc'
-      }
       let onHoverPreviousStyle = this.state.hoverPreviousButton ? grayStyle : {}
       let onHoverNextStyle = this.state.hoverNextButton ? grayStyle : {}
-
       return (
         <div>
           <h2 style={videoTitleStyle} >{this.props.currentVideo.title}</h2>
@@ -107,7 +110,11 @@ export class Television extends Component {
         </div>
       )
     }
-    return <div>LOADING</div>
+    return (
+      <div style={loadingScreenStyle} >
+        <CircularProgress color={indigo500} size={80} thickness={5} />
+      </div>
+    )
   }
 }
 
