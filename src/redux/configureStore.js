@@ -1,5 +1,4 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
-import { routerReducer } from 'react-router-redux'
 import thunk from 'redux-thunk'
 
 import authorization from './modules/authorization'
@@ -18,7 +17,6 @@ const entities = combineReducers({
 })
 const reducer = combineReducers({
   user,
-  routing: routerReducer,
   authorization,
   entities
 })
