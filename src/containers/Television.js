@@ -48,28 +48,31 @@ export class Television extends Component {
     }
     if (this.props.currentVideo) {
       const televisionContainerStyle = {
-      //   height: 'calc(100% - 117px) !important',
-        border: '2px solid',
+        height: 'calc(100vh - 135px)',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        overflow: 'auto'
       }
 
       const videoTitleStyle = {
         fontSize: '20px',
         lineHeight: '28px',
         fontWeight: '400',
-        color: indigo500
+        color: indigo500,
+        marginLeft: '48px',
+        marginRight: '48px'
       }
 
-      const reactPlayerStyle = {
+      const iconButtonStyle = {
+        height: '100%'
       }
 
       return (
         <div>
           <h2 style={videoTitleStyle} >{this.props.currentVideo.title}</h2>
           <div style={televisionContainerStyle} >
-            <IconButton onTouchTap={this.handleGetPreviousVideo} >
+            <IconButton style={iconButtonStyle} onTouchTap={this.handleGetPreviousVideo} >
               <SkipPrevious />
             </IconButton>
             <ReactPlayer
@@ -78,9 +81,8 @@ export class Television extends Component {
               onError={this.handleGetNextVideo}
               height='100%'
               width='100%'
-              style={reactPlayerStyle}
               youtubeConfig={opts} />
-            <IconButton onTouchTap={this.handleGetNextVideo} >
+            <IconButton style={iconButtonStyle} onTouchTap={this.handleGetNextVideo} >
               <SkipNext />
             </IconButton>
           </div>
