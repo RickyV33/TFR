@@ -3,7 +3,9 @@ import shortid from 'shortid'
 import { combineReducers } from 'redux'
 
 import { addToById, addToAllIds } from './entityHelper'
-import { initialState as channelsInitialState } from './channels'
+import { initialState as channelsInitialState, createChannels,
+  addChannels } from './channels'
+import { channelNames } from './channelNames.js'
 
 const ADD_NETWORK = 'TelevisionForReddit/networks/ADD_NETWORK'
 
@@ -12,7 +14,7 @@ function createNetwork (name, channels) {
   return {
     id,
     name,
-    channels: channels
+    channels
   }
 }
 
@@ -21,12 +23,7 @@ export const initialState = createNetwork('Videos', channelsInitialState.allIds)
 function networksById (state = { [initialState.id]: initialState }, action) {
   switch (action.type) {
     case ADD_NETWORK:
-      const { name, id, channels } = action
-      const payload = {
-        name,
-        id,
-        channels
-      }
+      const { type, ...payload } = action
       return addToById(state, payload)
 
     default:
@@ -37,6 +34,7 @@ function networksById (state = { [initialState.id]: initialState }, action) {
 function allNetworks (state = [initialState.id], action) {
   switch (action.type) {
     case ADD_NETWORK:
+      console.log(action)
       return addToAllIds(state, action.id)
 
     default:
@@ -53,12 +51,24 @@ export default combineReducers({
  * Action Creators
  */
 
-// const addNetwork = (name, channels) => {
-//   return {
-//     type: ADD_NETWORK,
-//     ...createNetwork(name, channels)
-//   }
-// }
+const addNetwork = (name, channels) => {
+  return {
+    type: ADD_NETWORK,
+    ...createNetwork(name, channels)
+  }
+}
+
+/**
+ * Action Creators
+ */
+
+export const createNewNetwork = name => {
+  return dispatch => {
+    const channels = createChannels(channelNames)
+    dispatch(addNetwork(name, channels.allIds))
+    dispatch(addChannels(channels))
+  }
+}
 
 /**
  * Selectors

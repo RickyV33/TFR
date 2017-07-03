@@ -9,6 +9,7 @@ import { addToById, addToAllIds } from './entityHelper'
 const GET_PREVIOUS_VIDEO = 'TelevisionForReddit/channels/GET_PREVIOUS_VIDEO'
 const GET_NEXT_VIDEO = 'TelevisionForReddit/channels/GET_NEXT_VIDEO'
 const ADD_VIDEOS_TO_NEXT = 'TelevisionForReddit/channels/ADD_VIDEOS_TO_NEXT'
+const ADD_CHANNELS = 'TelevisionForReddit/channels/ADD_CHANNELS'
 
 // Helper Functions
 function createChannel (id, nameId) {
@@ -27,7 +28,7 @@ function createChannel (id, nameId) {
   }
 }
 
-function createChannels (channelNames) {
+export function createChannels (channelNames) {
   let id
   const initialState = {
     byId: {},
@@ -64,7 +65,7 @@ export const initialState = createChannels(channelNames)
 
 // byId Slice Reducer
 function channelsById (state = initialState.byId, action) {
-  const currentChannel = state[action.id]
+  const currentChannel = action.id ? state[action.id] : {}
   let previous, current, next, shiftedVideos, payload
   if (currentChannel) {
     previous = currentChannel.previous
@@ -101,6 +102,12 @@ function channelsById (state = initialState.byId, action) {
       }
       return addToById(state, payload)
 
+    case ADD_CHANNELS:
+      return {
+        ...state,
+        ...action.channels.byId
+      }
+
     default:
       return state
   }
@@ -111,6 +118,9 @@ function allChannels (state = initialState.allIds, action) {
   switch (action.type) {
     case ADD_VIDEOS_TO_NEXT:
       return addToAllIds(state, action.id)
+
+    case ADD_CHANNELS:
+      return [...state, ...action.channels.allIds]
 
     default:
       return state
@@ -131,6 +141,8 @@ export const getPreviousVideo = id => ({ type: GET_PREVIOUS_VIDEO, id })
 export const getNextVideo = id => ({ type: GET_NEXT_VIDEO, id })
 
 export const addVideosToNext = (id, videos, after) => ({ type: ADD_VIDEOS_TO_NEXT, id, videos, after })
+
+export const addChannels = channels => ({ type: ADD_CHANNELS, channels })
 
 /**
  * Selectors
