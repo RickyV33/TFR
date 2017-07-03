@@ -1,10 +1,11 @@
 
 import React, { Component } from 'react'
-import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right'
+import AddCircleOutline from 'material-ui/svg-icons/content/add-circle-outline'
+import Dialog from 'material-ui/Dialog'
 
 import { selectAllChannels, getNextVideo } from '../redux/modules/channels'
 import { selectAllNetworks } from '../redux/modules/networks'
@@ -15,6 +16,7 @@ export class TelevisionGuide extends Component {
   constructor (props) {
     super(props)
 
+    this.state = { openCreateNetwork: false }
     this.networkMenuItems = this.networkMenuItems.bind(this)
     this.channelMenuItems = this.channelMenuItems.bind(this)
     this.handleChannelTouchTap = this.handleChannelTouchTap.bind(this)
@@ -58,9 +60,18 @@ export class TelevisionGuide extends Component {
   render () {
     return (
       <div>
-        <Menu >
-          {this.networkMenuItems()}
-        </Menu>
+        <MenuItem
+          leftIcon={<AddCircleOutline />}
+          primaryText='Add Network'
+          onTouchTap={() => this.setState({ openCreateNetwork: true })} />
+        {this.networkMenuItems()}
+        <Dialog
+          title='Add a New Network'
+          modal={false}
+          open={this.state.openCreateNetwork}
+          onRequestClose={() => this.setState({ openCreateNetwork: false })} >
+          Search for the network you want to add.
+        </Dialog>
       </div>
     )
   }
