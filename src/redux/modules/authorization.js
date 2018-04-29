@@ -58,6 +58,7 @@ export function getAccessToken () {
       return dispatch(fetchedAccessToken())
     }).catch(error => {
       console.error('getAccessToken() -> ', error)
+      return dispatch(fetchedAccessToken())
     })
   }
 }
